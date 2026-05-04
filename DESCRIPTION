@@ -1,0 +1,20 @@
+Package: StatDesign
+Title: StatDesign - Diseño de estudios y muestreo
+Version: 1.0.0
+Description: Aplicación Shiny modular para el diseño de estudios y esquemas
+    de muestreo en ciencias ambientales y recursos naturales.
+    Parte de la suite StatSuite de herramientas educativas para ciencia de datos.
+Authors@R: person(
+    given  = "Manuel",
+    family = "Spínola",
+    role   = c("aut", "cre"),
+    email  = "romeo.spinola.parallada@una.cr"
+  )
+Depends: R (>= 4.1.0)
+Imports:
+    shiny,
+    bslib,
+    bsicons,
+    tidyverse,
+    DT
+License: MIT
