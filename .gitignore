@@ -1,0 +1,20 @@
+# R
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.Rproj.user/
+*.Rproj
+
+# Shiny
+rsconnect/
+
+# Datos
+*.csv
+*.xlsx
+*.xls
+
+# Sistema
+.DS_Store
+Thumbs.db
+.positai
