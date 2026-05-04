@@ -33,8 +33,7 @@ mod_tipos_ui <- function(id) {
 
         div(
           class = "small text-muted",
-          "Selecciona un tipo para ver su definición, características,
-           diseños frecuentes en ciencias ambientales y un ejemplo."
+          "Selecciona un tipo para explorar su definición, características principales, contextos de aplicación y un ejemplo concreto."
         )
       ),
 
