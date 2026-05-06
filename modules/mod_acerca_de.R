@@ -1,0 +1,125 @@
+# ============================================================
+# mod_acerca_de.R — Módulo "Acerca de" para StatDesign
+#
+# Muestra información sobre R y los paquetes utilizados,
+# así como las citas para referencia académica.
+#
+# StatSuite:
+#   StatDesign  — Diseño de estudios y muestreo  ← esta app
+#   StatFlow    — Primeros análisis y visualización
+#   StatGeo     — Para trabajar con mapas (SIG)
+#   StatModels  — Modelos avanzados (próximamente)
+# ============================================================
+
+library(bsicons)
+
+mod_acerca_de_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+
+    layout_columns(
+      col_widths = c(12),
+      gap        = "1rem",
+
+      # ── Desarrollado con R ────────────────────────────────
+      card(
+        card_header(
+          bs_icon("code-slash"), " Desarrollado con R"
+        ),
+        card_body(
+          p("StatDesign fue desarrollada con R y los siguientes paquetes de código abierto."),
+
+          # Entorno R
+          p(class = "text-muted small fw-bold mt-3 mb-1", "ENTORNO DE DESARROLLO"),
+          div(
+            style = "display: flex; align-items: center; gap: 12px; background: var(--bs-secondary-bg); border-radius: 8px; padding: 10px 14px;",
+            bs_icon("r-circle", size = "1.2em"),
+            tags$strong("R Project for Statistical Computing"),
+            tags$span(
+              style = "color: gray; font-size: 0.85em;",
+              paste0("v", R.version$major, ".", R.version$minor)
+            ),
+            tags$a(
+              "r-project.org",
+              href   = "https://www.r-project.org",
+              target = "_blank",
+              style  = "margin-left: auto; font-size: 0.85em;"
+            )
+          ),
+
+          # Paquetes
+          p(class = "text-muted small fw-bold mt-3 mb-2", "PAQUETES"),
+          tags$table(
+            class = "table table-sm table-hover",
+            style = "font-size: 0.85em;",
+            tags$thead(
+              tags$tr(
+                tags$th("Paquete"),
+                tags$th("Versión"),
+                tags$th("Referencia")
+              )
+            ),
+            tags$tbody(
+              tags$tr(
+                tags$td(tags$code("shiny")),
+                tags$td(paste0("v", packageVersion("shiny"))),
+                tags$td(tags$a("shiny.posit.co", href = "https://shiny.posit.co", target = "_blank"))
+              ),
+              tags$tr(
+                tags$td(tags$code("bslib")),
+                tags$td(paste0("v", packageVersion("bslib"))),
+                tags$td(tags$a("rstudio.github.io/bslib", href = "https://rstudio.github.io/bslib", target = "_blank"))
+              ),
+              tags$tr(
+                tags$td(tags$code("bsicons")),
+                tags$td(paste0("v", packageVersion("bsicons"))),
+                tags$td(tags$a("github.com/rstudio/bsicons", href = "https://github.com/rstudio/bsicons", target = "_blank"))
+              ),
+              tags$tr(
+                tags$td(tags$code("tidyverse")),
+                tags$td(paste0("v", packageVersion("tidyverse"))),
+                tags$td(tags$a("tidyverse.org", href = "https://www.tidyverse.org", target = "_blank"))
+              ),
+              tags$tr(
+                tags$td(tags$code("DT")),
+                tags$td(paste0("v", packageVersion("DT"))),
+                tags$td(tags$a("rstudio.github.io/DT", href = "https://rstudio.github.io/DT", target = "_blank"))
+              )
+            )
+          )
+        )
+      ),
+
+      # ── Citas ─────────────────────────────────────────────
+      card(
+        card_header(
+          bs_icon("journal-text"), " Citas"
+        ),
+        card_body(
+          p("Si utilizás StatDesign en tu investigación, por favor citá R y esta aplicación."),
+
+          p(class = "text-muted small fw-bold mt-3 mb-1", "CÓMO CITAR R"),
+          tags$pre(
+            style = "background: var(--bs-secondary-bg); border-left: 3px solid #6c757d; border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 0.8em; white-space: pre-wrap;",
+            "R Core Team (2026). R: A Language and Environment for Statistical
+Computing. R Foundation for Statistical Computing, Vienna, Austria.
+https://www.R-project.org/"
+          ),
+
+          p(class = "text-muted small fw-bold mt-3 mb-1", "CÓMO CITAR ESTA APLICACIÓN"),
+          tags$pre(
+            style = "background: var(--bs-secondary-bg); border-left: 3px solid #6c757d; border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 0.8em; white-space: pre-wrap;",
+            "Spínola, M. (2026). StatDesign: Diseño de estudios y muestreo
+[Aplicación web]. StatSuite. https://statsuite.netlify.app"
+          )
+        )
+      )
+    )
+  )
+}
+
+mod_acerca_de_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    # Sin lógica de servidor por ahora
+  })
+}

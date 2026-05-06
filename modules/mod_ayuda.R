@@ -5,8 +5,7 @@
 mod_ayuda_ui <- function(id) {
   ns <- NS(id)
 
-  nav_panel(
-    title = "❓ Ayuda",
+  tagList(
 
     div(
       class = "p-3",
@@ -33,19 +32,15 @@ mod_ayuda_ui <- function(id) {
           )
         ),
 
-        # ── Suite StatX ───────────────────────────────
+        # ── StatSuite ───────────────────────────────
         card(
-          card_header("Suite StatX"),
-          p("StatDesign es parte de una suite de herramientas estadísticas
-             para ciencias ambientales y recursos naturales:"),
-          tags$ul(
-            tags$li(strong("StatFlow"), " — Primeros análisis y visualización de datos"),
-            tags$li(strong("StatDesign"), " — Diseño de estudios y muestreo (esta app)"),
-            tags$li(strong("StatModels"), " — Modelos estadísticos avanzados (próximamente)")
-          ),
+          card_header("StatSuite"),
+          p("StatDesign forma parte de ",
+            tags$a("StatSuite", href = "https://statsuite.netlify.app", target = "_blank"),
+            ", una colección de aplicaciones estadísticas para el análisis y visualización de datos."),
           p(class = "text-muted small mt-2",
             "Todas las apps comparten la misma paleta de colores, fuente y
-             convenciones, para una experiencia coherente.")
+     convenciones, para una experiencia coherente.")
         ),
 
         # ── Conceptos clave ───────────────────────────

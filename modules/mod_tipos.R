@@ -7,8 +7,7 @@
 mod_tipos_ui <- function(id) {
   ns <- NS(id)
 
-  nav_panel(
-    title = "📚 Tipos de estudio",
+  tagList(
 
     layout_sidebar(
       fillable = FALSE,
@@ -62,13 +61,13 @@ mod_tipos_ui <- function(id) {
 
         # Diseños frecuentes
         card(
-          card_header("Diseños frecuentes en ciencias ambientales"),
+          card_header("Aplicaciones frecuentes en ciencias ambientales y recursos naturales"),
           uiOutput(ns("disenios"))
         ),
 
         # Estadísticas típicas
         card(
-          card_header("Estadísticas típicas"),
+          card_header("Estadísticos típicos"),
           uiOutput(ns("estadisticas"))
         ),
 

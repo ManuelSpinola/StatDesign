@@ -44,12 +44,17 @@ tema_app <- bs_theme(
 ) |>
   bs_add_rules("
   .navbar { background-color: #1170AA !important; }
-  .navbar-brand, .nav-link { color: #ffffff !important; }
+  .navbar-nav .nav-link { color: #ffffff !important; }
+  .navbar .navbar-brand { color: #ffffff !important; }
   .nav-link.active { border-bottom: 2px solid #FC7D0B; }
   .btn-primary { background-color: #FC7D0B; border-color: #FC7D0B; color: #ffffff; }
   .btn-primary:hover { background-color: #d4680a; border-color: #d4680a; }
   .navbar-brand { display: flex !important; align-items: center !important;
                   padding-top: 0 !important; padding-bottom: 0 !important; }
+
+  /* Tabs internos (navset_card_tab) */
+  .tab-content .nav-link, .navset-card-tab .nav-link { color: #57606C !important; }
+  .tab-content .nav-link.active, .navset-card-tab .nav-link.active { color: #1170AA !important; }
 
   /* Tarjetas de tipo de estudio */
   .card-tipo { border-left: 4px solid; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; }
@@ -108,7 +113,7 @@ tipos_estudio <- list(
       "Encuesta / censo"     = "Recolección estructurada sobre uso de recursos naturales o percepción ambiental.",
       "Estudio de caso"      = "Descripción detallada de un ecosistema, especie o evento ambiental específico."
     ),
-    ejemplo    = "Inventario de especies de aves en un humedal costero de Guanacaste: se registran especies, abundancia relativa y gremios tróficos durante la época seca y lluviosa, sin manipular ninguna variable del sistema.",
+    ejemplo    = "Inventario de especies de aves en un humedal costero: se registran especies, abundancia relativa y gremios tróficos durante la época seca y lluviosa, sin manipular ninguna variable del sistema.",
     estadisticas = "Frecuencias, proporciones, índices de diversidad (Shannon, Simpson), estadísticas descriptivas."
   ),
 
