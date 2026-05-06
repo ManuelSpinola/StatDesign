@@ -22,9 +22,11 @@ source("R/helpers.R")
 # ── 2. Módulos ─────────────────────────────────────────────
 source("modules/mod_tipos.R")
 source("modules/mod_muestreo.R")
+source("modules/mod_fundamentos.R")
 source("modules/mod_asistente.R")
 source("modules/mod_ayuda.R")
 source("modules/mod_acerca_de.R")
+
 
 # ── 3. UI ──────────────────────────────────────────────────
 ui <- page_navbar(
@@ -43,11 +45,12 @@ ui <- page_navbar(
     style = paste0("border-top: 1px solid ", colores$borde, ";"),
     "Manuel Spínola · ICOMVIS · Universidad Nacional · Costa Rica"
   ),
-  nav_panel(title = "Tipos de estudio",   icon = bs_icon("book"),           mod_tipos_ui("tipos")),
-  nav_panel(title = "Diseños de muestreo",icon = bs_icon("grid"),           mod_muestreo_ui("muestreo")),
-  nav_panel(title = "Asistente",          icon = bs_icon("compass"),        mod_asistente_ui("asistente")),
-  nav_panel(title = "Ayuda",              icon = bs_icon("question-circle"),mod_ayuda_ui("ayuda")),
-  nav_panel(title = "Acerca de",          icon = bs_icon("info-circle"),    mod_acerca_de_ui("acerca_de")),
+  nav_panel(title = "Tipos de estudio",       icon = bs_icon("book"),             mod_tipos_ui("tipos")),
+  nav_panel(title = "Diseños de muestreo",    icon = bs_icon("grid"),             mod_muestreo_ui("muestreo")),
+  nav_panel(title = "Fundamentos del diseño", icon = bs_icon("journal-bookmark"), mod_fundamentos_ui("fundamentos")),
+  nav_panel(title = "Asistente",              icon = bs_icon("compass"),          mod_asistente_ui("asistente")),
+  nav_panel(title = "Ayuda",                  icon = bs_icon("question-circle"),  mod_ayuda_ui("ayuda")),
+  nav_panel(title = "Acerca de",              icon = bs_icon("info-circle"),      mod_acerca_de_ui("acerca_de")),
   nav_spacer(),
   nav_item(tags$span(class = "text-muted small", "StatDesign v1.0"))
 )
@@ -56,6 +59,7 @@ ui <- page_navbar(
 server <- function(input, output, session) {
   mod_tipos_server("tipos")
   mod_muestreo_server("muestreo")
+  mod_fundamentos_server("fundamentos")
   mod_asistente_server("asistente")
   mod_ayuda_server("ayuda")
   mod_acerca_de_server("acerca_de")

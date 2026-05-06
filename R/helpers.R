@@ -113,8 +113,9 @@ tipos_estudio <- list(
       "Encuesta / censo"     = "Recolección estructurada sobre uso de recursos naturales o percepción ambiental.",
       "Estudio de caso"      = "Descripción detallada de un ecosistema, especie o evento ambiental específico."
     ),
-    ejemplo    = "Inventario de especies de aves en un humedal costero: se registran especies, abundancia relativa y gremios tróficos durante la época seca y lluviosa, sin manipular ninguna variable del sistema.",
-    estadisticas = "Frecuencias, proporciones, índices de diversidad (Shannon, Simpson), estadísticas descriptivas."
+    ejemplo      = "Inventario de especies de aves en un humedal costero: se registran especies, abundancia relativa y gremios tróficos durante la época seca y lluviosa, sin manipular ninguna variable del sistema.",
+    cuando       = "Cuando el objetivo es caracterizar un sistema, una población o un fenómeno antes de formular hipótesis causales. Ideal como punto de partida de cualquier línea de investigación.",
+    estadisticas = "Estadísticas descriptivas, frecuencias, proporciones, índices de diversidad (Shannon, Simpson)."
   ),
 
   observacional = list(
@@ -140,7 +141,8 @@ tipos_estudio <- list(
       "Regresión múltiple"   = "Modela la relación entre una variable respuesta y varias predictoras observadas en campo.",
       "Seguimiento temporal" = "Monitoreo de poblaciones o ecosistemas a lo largo del tiempo para detectar tendencias."
     ),
-    ejemplo    = "Relación entre porcentaje de cobertura boscosa en cuencas hidrográficas y concentración de sedimentos en el agua: se miden ambas variables en 30 cuencas de Costa Rica sin intervenir en ninguna.",
+    ejemplo      = "Relación entre porcentaje de cobertura boscosa en cuencas hidrográficas y concentración de sedimentos en el agua: se miden ambas variables en 30 cuencas de Costa Rica sin intervenir en ninguna.",
+    cuando       = "Cuando no es ético o factible experimentar, o cuando se quieren explorar patrones naturales y relaciones entre variables antes de diseñar un experimento.",
     estadisticas = "Correlación de Pearson o Spearman, regresión lineal/múltiple, modelos lineales generalizados (GLM)."
   ),
 
@@ -167,8 +169,9 @@ tipos_estudio <- list(
       "Cuasiexperimental"           = "Hay intervención pero sin aleatorización completa. Común en restauración y manejo.",
       "BACI (antes-después / control-impacto)" = "Compara sitios impactados y de referencia antes y después de una perturbación o intervención."
     ),
-    ejemplo    = "Efecto de tres tratamientos de revegetación (pastos nativos, arbustos pioneros y combinación) sobre la tasa de erosión del suelo en laderas degradadas: parcelas asignadas aleatoriamente, con medición de pérdida de suelo a 6 y 12 meses.",
-    estadisticas = "ANOVA, ANCOVA, pruebas t, modelos mixtos, diseños de bloques completos al azar."
+    ejemplo      = "Efecto de tres tratamientos de revegetación (pastos nativos, arbustos pioneros y combinación) sobre la tasa de erosión del suelo en laderas degradadas: parcelas asignadas aleatoriamente, con medición de pérdida de suelo a 6 y 12 meses.",
+    cuando       = "Cuando se necesita establecer causalidad con rigor y es posible manipular la variable de interés bajo condiciones controladas o semicontroladas.",
+    estadisticas = "Modelos mixtos (LMM, GLMM), ANOVA, ANCOVA, pruebas t, modelos de efectos fijos y aleatorios."
   )
 )
 

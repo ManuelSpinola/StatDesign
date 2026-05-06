@@ -1,52 +1,56 @@
 # ============================================================
 # mod_asistente.R — Módulo: Asistente de diseño
-# Guía al usuario en 3 preguntas y recomienda el tipo de
-# estudio más adecuado para su pregunta de investigación.
+# Árbol condicional:
+#   Describir                → Descriptivo (1 pregunta)
+#   Identificar relaciones   → ¿Manipulás? → Observacional / Experimental
+#   Determinar causa y efecto → Experimental (1 pregunta)
 # ============================================================
 
-# ── Preguntas del wizard ──────────────────────────────────
-preguntas <- list(
-  list(
-    id   = "objetivo",
-    q    = "¿Cuál es tu objetivo principal?",
-    sub  = "Esto define el tipo de pregunta de investigación que guiará el diseño.",
-    opts = list(
-      list(val = "desc", t = "Describir un fenómeno o sistema",
-           d = "Caracterizar cómo se presenta algo: distribución de especies, calidad ambiental, uso de recursos."),
-      list(val = "obs",  t = "Identificar relaciones o asociaciones",
-           d = "Saber si dos o más variables están relacionadas: cobertura y sedimentos, temperatura y diversidad."),
-      list(val = "exp",  t = "Determinar causa y efecto",
-           d = "Comprobar si una intervención o variable produce un cambio medible en otra.")
-    )
-  ),
-  list(
-    id   = "manipulacion",
-    q    = "¿Vas a manipular alguna variable o aplicar un tratamiento?",
-    sub  = "La manipulación intencional es lo que define un experimento en ciencias ambientales.",
-    opts = list(
-      list(val = "no",  t = "No, solo voy a observar y medir",
-           d = "Registro de variables en el estado natural del sistema, sin intervenir."),
-      list(val = "yes", t = "Sí, voy a intervenir (tratamiento, restauración, manejo)",
-           d = "El investigador aplica un tratamiento: revegetación, remoción de especie invasora, fertilización, etc.")
-    )
-  ),
-  list(
-    id   = "causalidad",
-    q    = "¿Buscas establecer causalidad o identificar asociaciones?",
-    sub  = "Esto determina el nivel de evidencia requerido y la complejidad del análisis.",
-    opts = list(
-      list(val = "assoc",  t = "Asociación o correlación",
-           d = "Me interesa cuantificar si hay relación y en qué dirección, no necesariamente la causa."),
-      list(val = "causal", t = "Causalidad (demostrar que X produce Y)",
-           d = "Necesito evidencia de que la variable que manipulé generó el cambio observado.")
-    )
+# ── Pregunta 1: objetivo ──────────────────────────────────
+pregunta_objetivo <- list(
+  id   = "objetivo",
+  q    = "¿Cuál es tu objetivo principal?",
+  sub  = "Esto define el tipo de pregunta de investigación que guiará el diseño.",
+  opts = list(
+    list(val = "desc", t = "Describir un fenómeno o sistema",
+         d = "Caracterizar cómo se presenta algo: distribución de especies, calidad ambiental, uso de recursos."),
+    list(val = "obs",  t = "Identificar relaciones o asociaciones",
+         d = "Saber si dos o más variables están relacionadas: cobertura y sedimentos, temperatura y diversidad."),
+    list(val = "exp",  t = "Determinar causa y efecto",
+         d = "Comprobar si una intervención genera un cambio medible y atribuible.")
   )
 )
 
+# ── Pregunta 2: manipulación (solo si objetivo == "obs") ──
+pregunta_manipulacion <- list(
+  id   = "manipulacion",
+  q    = "¿Vas a manipular alguna variable o aplicar un tratamiento?",
+  sub  = "La manipulación intencional es lo que distingue un experimento de un estudio observacional.",
+  opts = list(
+    list(val = "no",  t = "No, solo voy a observar y medir",
+         d = "Registro de variables en el estado natural del sistema, sin intervenir."),
+    list(val = "yes", t = "Sí, voy a intervenir (tratamiento, restauración, manejo)",
+         d = "El investigador aplica un tratamiento: revegetación, remoción de especie invasora, fertilización, etc.")
+  )
+)
+
+# ── Lógica de flujo ───────────────────────────────────────
+# Devuelve las preguntas que corresponden según las respuestas acumuladas
+preguntas_activas <- function(ans) {
+  obj <- ans[["objetivo"]]
+  if (is.null(obj)) return(list(pregunta_objetivo))
+  if (obj == "obs")  return(list(pregunta_objetivo, pregunta_manipulacion))
+  return(list(pregunta_objetivo))  # desc o exp: solo 1 pregunta
+}
+
 # ── Lógica de recomendación ───────────────────────────────
 recomendar_tipo <- function(ans) {
-  if (ans[["manipulacion"]] == "yes" || ans[["causalidad"]] == "causal") return("experimental")
-  if (ans[["objetivo"]] == "desc") return("descriptivo")
+  obj <- ans[["objetivo"]]
+  if (obj == "desc") return("descriptivo")
+  if (obj == "exp")  return("experimental")
+  # obj == "obs": depende de si manipula
+  if (!is.null(ans[["manipulacion"]]) && ans[["manipulacion"]] == "yes")
+    return("experimental")
   return("observacional")
 }
 
@@ -54,24 +58,15 @@ recomendar_tipo <- function(ans) {
 mod_asistente_ui <- function(id) {
   ns <- NS(id)
 
-  nav_panel(
-    title = "🧭 Asistente de diseño",
-
+  tagList(
     div(
       class = "p-3",
       style = "max-width: 700px; margin: 0 auto;",
 
-      # Barra de progreso
       uiOutput(ns("progreso")),
-
       br(),
-
-      # Contenido dinámico: pregunta o resultado
       uiOutput(ns("contenido")),
-
       br(),
-
-      # Navegación
       uiOutput(ns("navegacion"))
     )
   )
@@ -82,28 +77,33 @@ mod_asistente_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # Estado reactivo
-    paso     <- reactiveVal(1)
+    paso       <- reactiveVal(1)
     respuestas <- reactiveVal(list())
 
-    n_pasos <- length(preguntas)
+    # Preguntas activas según respuestas acumuladas
+    preguntas <- reactive({
+      preguntas_activas(respuestas())
+    })
+
+    n_pasos <- reactive({ length(preguntas()) })
 
     # ── Barra de progreso ──────────────────────────────
     output$progreso <- renderUI({
       p <- paso()
-      if (p > n_pasos) return(NULL)
+      n <- n_pasos()
+      if (p > n) return(NULL)
 
       div(
         class = "d-flex align-items-center gap-2 mb-2",
         span(class = "small text-muted",
-             paste0("Pregunta ", p, " de ", n_pasos)),
+             paste0("Pregunta ", p, " de ", n)),
         div(
           class = "progress flex-grow-1",
           style = "height: 6px;",
           div(
             class = "progress-bar",
             style = paste0(
-              "width: ", round(p / n_pasos * 100), "%;",
+              "width: ", round(p / n * 100), "%;",
               "background-color: ", colores$acento, ";"
             )
           )
@@ -114,9 +114,10 @@ mod_asistente_server <- function(id) {
     # ── Contenido principal ────────────────────────────
     output$contenido <- renderUI({
       p <- paso()
+      n <- n_pasos()
 
       # Resultado final
-      if (p > n_pasos) {
+      if (p > n) {
         ans  <- respuestas()
         tipo <- recomendar_tipo(ans)
         t    <- tipos_estudio[[tipo]]
@@ -131,30 +132,28 @@ mod_asistente_server <- function(id) {
             div(
               class = "row g-2",
               div(class = "col-md-6",
-                strong("¿Cuándo usarlo?"), br(),
-                span(class = "small text-muted",
-                     "Cuando no es ético o factible experimentar a escala ecosistémica,
-                      o cuando se quieren explorar patrones naturales.")
+                  strong("¿Cuándo usarlo?"), br(),
+                  span(class = "small text-muted", t$cuando)
               ),
               div(class = "col-md-6",
-                strong("Estadísticas típicas"), br(),
-                span(class = "small text-muted", t$estadisticas)
+                  strong("Análisis estadísticos recomendados"), br(),
+                  span(class = "small text-muted", t$estadisticas)
               ),
               div(class = "col-md-6 mt-2",
-                strong("Diseños compatibles"), br(),
-                span(class = "small text-muted",
-                     paste(names(t$diseños), collapse = " · "))
+                  strong("Diseños compatibles"), br(),
+                  span(class = "small text-muted",
+                       paste(names(t$diseños), collapse = " · "))
               )
             )
           ),
           card(
-            card_header("Ejemplo ambiental"),
+            card_header("Ejemplo"),
             p(class = "fst-italic text-muted mb-0", t$ejemplo)
           )
         )
       } else {
         # Pregunta actual
-        preg <- preguntas[[p]]
+        preg <- preguntas()[[p]]
         ans  <- respuestas()
         sel  <- ans[[preg$id]]
 
@@ -184,19 +183,16 @@ mod_asistente_server <- function(id) {
     # ── Navegación ─────────────────────────────────────
     output$navegacion <- renderUI({
       p <- paso()
+      n <- n_pasos()
 
-      if (p > n_pasos) {
-        # Botones del resultado
+      if (p > n) {
         div(
-          class = "d-flex gap-2",
           actionButton(ns("reiniciar"), "↺ Reiniciar",
-                       class = "btn btn-outline-secondary"),
-          actionButton(ns("ver_tipo"), "Ver detalle del tipo →",
-                       class = "btn btn-primary")
+                       class = "btn btn-outline-secondary")
         )
       } else {
-        ans <- respuestas()
-        preg <- preguntas[[p]]
+        ans        <- respuestas()
+        preg       <- preguntas()[[p]]
         tiene_resp <- !is.null(ans[[preg$id]])
 
         div(
@@ -213,15 +209,18 @@ mod_asistente_server <- function(id) {
 
     # ── Observers: selección de opciones ───────────────
     observe({
-      p    <- paso()
-      if (p > n_pasos) return()
-      preg <- preguntas[[p]]
+      p <- paso()
+      n <- n_pasos()
+      if (p > n) return()
+      preg <- preguntas()[[p]]
 
       lapply(preg$opts, function(o) {
         btn_id <- paste0("opt_", o$val)
         observeEvent(input[[btn_id]], {
           ans <- respuestas()
           ans[[preg$id]] <- o$val
+          # Si cambia objetivo, limpiar manipulacion para evitar respuestas huerfanas
+          if (preg$id == "objetivo") ans[["manipulacion"]] <- NULL
           respuestas(ans)
         }, ignoreInit = TRUE)
       })
@@ -230,7 +229,7 @@ mod_asistente_server <- function(id) {
     # ── Siguiente / Anterior ───────────────────────────
     observeEvent(input$siguiente, {
       p    <- paso()
-      preg <- preguntas[[p]]
+      preg <- preguntas()[[p]]
       ans  <- respuestas()
       if (!is.null(ans[[preg$id]])) paso(p + 1)
     })
@@ -246,9 +245,9 @@ mod_asistente_server <- function(id) {
       respuestas(list())
     })
 
-    # ── Ver detalle (devuelve el tipo para navegación) ─
+    # ── Devuelve tipo recomendado ──────────────────────
     tipo_recomendado <- reactive({
-      if (paso() > n_pasos) recomendar_tipo(respuestas()) else NULL
+      if (paso() > n_pasos()) recomendar_tipo(respuestas()) else NULL
     })
 
     return(tipo_recomendado)
