@@ -840,6 +840,26 @@ mod_muestreo_ui <- function(id) {
               card(
                 card_header("Fórmula"),
                 uiOutput(ns("formula_detalle"))
+              ),
+
+              # ── Código R reproducible ───────────────────
+              card(
+                card_header(
+                  class = "d-flex justify-content-between align-items-center",
+                  tagList(bs_icon("code-slash"), " C\u00f3digo R reproducible"),
+                  downloadButton(
+                    ns("descargar_script"),
+                    label = "Descargar .R",
+                    icon  = bs_icon("download"),
+                    class = "btn-sm btn-outline-primary"
+                  )
+                ),
+                p(
+                  "Este script reproduce el c\u00e1lculo con los par\u00e1metros actuales.
+                   Pod\u00e9s copiarlo directamente en R o descargarlo.",
+                  class = "text-muted small px-3 pt-2 mb-1"
+                ),
+                verbatimTextOutput(ns("codigo_r"))
               )
             )
           )
@@ -948,6 +968,83 @@ mod_muestreo_server <- function(id) {
         )
       }
     })
+
+    # ── Código R reproducible ─────────────────────────────
+    codigo_generado <- reactive({
+      r <- calc()
+
+      encabezado <- encabezado_script("StatDesign", "Calculadora de tama\u00f1o de muestra")
+
+      nivel_conf <- ifelse(abs(r$z - 1.96)  < 0.01, "95%",
+                           ifelse(abs(r$z - 2.576) < 0.01, "99%", "90%"))
+
+      cuerpo <- if (r$tipo == "prop") {
+        paste0(
+          "# Par\u00e1metros\n",
+          "z <- ", r$z, "   # Nivel de confianza ", nivel_conf, "\n",
+          "p <- ", r$p, "   # Proporci\u00f3n esperada\n",
+          "e <- ", r$e, "   # Error m\u00e1ximo aceptable\n",
+          if (r$N > 0) paste0("N <- ", r$N, "   # Tama\u00f1o de la poblaci\u00f3n\n") else "",
+          "\n",
+          "# Muestra base (f\u00f3rmula para proporciones)\n",
+          "n0 <- ceiling((z^2 * p * (1 - p)) / e^2)\n",
+          "n0  # \u2192 ", r$n0, "\n"
+        )
+      } else {
+        paste0(
+          "# Par\u00e1metros\n",
+          "z  <- ", r$z, "   # Nivel de confianza ", nivel_conf, "\n",
+          "cv <- ", round(r$cv / 100, 3), "   # Coeficiente de variaci\u00f3n (decimal)\n",
+          "e  <- ", r$e, "   # Error m\u00e1ximo aceptable\n",
+          if (r$N > 0) paste0("N  <- ", r$N, "   # Tama\u00f1o de la poblaci\u00f3n\n") else "",
+          "\n",
+          "# Muestra base (f\u00f3rmula para medias con CV)\n",
+          "n0 <- ceiling((z * cv / e)^2)\n",
+          "n0  # \u2192 ", r$n0, "\n"
+        )
+      }
+
+      finita <- if (r$N > 0 && !is.na(r$nc)) {
+        paste0(
+          "\n",
+          "# Correcci\u00f3n por poblaci\u00f3n finita\n",
+          "nc <- ceiling(n0 / (1 + n0 / N))\n",
+          "nc  # \u2192 ", r$nc, "\n",
+          "\n",
+          "# Fracci\u00f3n de muestreo\n",
+          "round(nc / N * 100, 1)  # \u2192 ", r$frac, "\n"
+        )
+      } else if (r$N > 0 && r$N <= r$n0) {
+        paste0(
+          "\n",
+          "# Nota: la muestra calculada (", r$n0, ") es >= la poblaci\u00f3n (", r$N, ").\n",
+          "# Consider\u00e1 censar toda la poblaci\u00f3n en lugar de muestrear.\n"
+        )
+      } else {
+        paste0(
+          "\n",
+          "# Para aplicar correcci\u00f3n por poblaci\u00f3n finita,\n",
+          "# defin\u00ed N (tama\u00f1o de tu poblaci\u00f3n):\n",
+          "# N  <- 500\n",
+          "# nc <- ceiling(n0 / (1 + n0 / N))\n"
+        )
+      }
+
+      paste0(encabezado, cuerpo, finita)
+    })
+
+    output$codigo_r <- renderText({
+      codigo_generado()
+    })
+
+    output$descargar_script <- downloadHandler(
+      filename = function() {
+        paste0("muestra_", format(Sys.Date(), "%Y%m%d"), ".R")
+      },
+      content = function(file) {
+        writeLines(codigo_generado(), file)
+      }
+    )
 
     output$interpretacion <- renderUI({
       r <- calc()

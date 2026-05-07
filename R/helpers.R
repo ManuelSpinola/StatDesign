@@ -280,3 +280,19 @@ diseños_muestreo <- list(
     )
   )
 )
+
+# ── Código R reproducible: encabezado estándar ────────────
+# Usada por todos los módulos de StatSuite que generan código R.
+# Parámetros:
+#   app    — "StatDesign", "StatFlow", "StatGeo", "StatMonitor"
+#   modulo — nombre del módulo, p.ej. "Calculadora de tamaño de muestra"
+encabezado_script <- function(app, modulo) {
+  paste0(
+    "# ============================================\n",
+    "# ", app, " \u00b7 StatSuite\n",
+    "# M\u00f3dulo: ", modulo, "\n",
+    "# Generado: ", format(Sys.Date(), "%Y-%m-%d"), "\n",
+    "# Manuel Sp\u00ednola \u00b7 ICOMVIS \u00b7 UNA \u00b7 Costa Rica\n",
+    "# ============================================\n\n"
+  )
+}
