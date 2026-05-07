@@ -182,13 +182,469 @@ mod_muestreo_ui <- function(id) {
   ns <- NS(id)
 
   nav_panel(
-    title = "\U0001f4d0 Diseños de muestreo",
+    title = "Diseños de muestreo",
 
     navset_card_tab(
 
+      # ── Pestaña 0: Conceptos básicos ───────────────────
+      nav_panel(
+        title = tagList(bs_icon("book", class = "me-1"), "Conceptos básicos"),
+
+        div(
+          class = "p-3",
+
+          p(
+            "El muestreo es el proceso de seleccionar un subconjunto de unidades
+             de una población para estimar sus parámetros. Una muestra bien diseñada
+             garantiza representatividad y permite hacer inferencias válidas sin
+             necesidad de medir a todos los individuos.",
+            class = "text-muted mb-4"
+          ),
+
+          # ── Jerarquía del muestreo ──────────────────────
+          h5("Jerarquía del muestreo",
+             style = paste0("color:", colores$primario,
+                            "; border-bottom: 2px solid ", colores$borde,
+                            "; padding-bottom: 0.4rem; margin-bottom: 1rem;")),
+
+          card(
+            card_body(
+              tags$svg(
+                xmlns   = "http://www.w3.org/2000/svg",
+                viewBox = "0 0 680 130",
+                style   = "width: 100%; display: block;",
+                role    = "img",
+
+                tags$defs(
+                  tags$marker(
+                    id="arr2", viewBox="0 0 10 10", refX="8", refY="5",
+                    markerWidth="6", markerHeight="6", orient="auto-start-reverse",
+                    tags$path(d="M2 1L8 5L2 9", fill="none", stroke="context-stroke",
+                              `stroke-width`="1.5", `stroke-linecap`="round",
+                              `stroke-linejoin`="round")
+                  )
+                ),
+
+                # Box 1: Elemento (gris)
+                tags$rect(x="10", y="30", width="110", height="60", rx="8",
+                          fill="#F1EFE8", stroke="#5F5E5A", `stroke-width`="0.5"),
+                tags$text(x="65", y="52", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="13",
+                          `font-weight`="500", fill="#2C2C2A", "Elemento"),
+                tags$text(x="65", y="72", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="11",
+                          fill="#5F5E5A", "árbol, individuo,"),
+                tags$text(x="65", y="86", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="11",
+                          fill="#5F5E5A", "observación"),
+
+                # Flecha 1→2
+                tags$line(x1="122", y1="60", x2="142", y2="60",
+                          stroke="#B4B2A9", `stroke-width`="1.5",
+                          `marker-end`="url(#arr2)"),
+
+                # Box 2: Unidad de muestreo (azul)
+                tags$rect(x="145", y="30", width="120", height="60", rx="8",
+                          fill="#E6F1FB", stroke="#185FA5", `stroke-width`="0.5"),
+                tags$text(x="205", y="48", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="13",
+                          `font-weight`="500", fill="#0C447C", "Unidad de"),
+                tags$text(x="205", y="64", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="13",
+                          `font-weight`="500", fill="#0C447C", "muestreo"),
+                tags$text(x="205", y="82", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="11",
+                          fill="#185FA5", "parcela, trampa"),
+
+                # Flecha 2→3
+                tags$line(x1="267", y1="60", x2="287", y2="60",
+                          stroke="#B4B2A9", `stroke-width`="1.5",
+                          `marker-end`="url(#arr2)"),
+
+                # Box 3: Marco de muestreo (azul)
+                tags$rect(x="290", y="30", width="120", height="60", rx="8",
+                          fill="#E6F1FB", stroke="#185FA5", `stroke-width`="0.5"),
+                tags$text(x="350", y="48", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="13",
+                          `font-weight`="500", fill="#0C447C", "Marco de"),
+                tags$text(x="350", y="64", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="13",
+                          `font-weight`="500", fill="#0C447C", "muestreo"),
+                tags$text(x="350", y="82", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="11",
+                          fill="#185FA5", "lista de unidades"),
+
+                # Flecha 3→4
+                tags$line(x1="412", y1="60", x2="432", y2="60",
+                          stroke="#B4B2A9", `stroke-width`="1.5",
+                          `marker-end`="url(#arr2)"),
+
+                # Box 4: Población muestreada (teal)
+                tags$rect(x="435", y="20", width="110", height="38", rx="8",
+                          fill="#E1F5EE", stroke="#0F6E56", `stroke-width`="0.5"),
+                tags$text(x="490", y="33", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="13",
+                          `font-weight`="500", fill="#085041", "Población"),
+                tags$text(x="490", y="50", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="13",
+                          `font-weight`="500", fill="#085041", "muestreada"),
+                tags$rect(x="435", y="66", width="110", height="26", rx="8",
+                          fill="#E1F5EE", stroke="#0F6E56", `stroke-width`="0.5"),
+                tags$text(x="490", y="79", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="11",
+                          fill="#0F6E56", "dentro del marco"),
+
+                # Flecha 4→5 (punteada)
+                tags$line(x1="547", y1="60", x2="567", y2="60",
+                          stroke="#B4B2A9", `stroke-width`="1.5",
+                          `stroke-dasharray`="4 3",
+                          `marker-end`="url(#arr2)"),
+
+                # Box 5: Población objetivo (ámbar, punteado)
+                tags$rect(x="570", y="15", width="100", height="90", rx="8",
+                          fill="#FAEEDA", stroke="#BA7517", `stroke-width`="1",
+                          `stroke-dasharray`="5 3"),
+                tags$text(x="620", y="42", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="13",
+                          `font-weight`="500", fill="#633806", "Población"),
+                tags$text(x="620", y="58", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="13",
+                          `font-weight`="500", fill="#633806", "objetivo"),
+                tags$text(x="620", y="75", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="11",
+                          fill="#BA7517", "a la que se"),
+                tags$text(x="620", y="89", `text-anchor`="middle",
+                          `dominant-baseline`="central", `font-size`="11",
+                          fill="#BA7517", "quiere generalizar")
+              ),
+              p(class = "text-muted small mt-2 mb-0",
+                "La flecha punteada indica que la población muestreada idealmente
+                 coincide con la población objetivo, pero en la práctica pueden diferir.")
+            )
+          ),
+
+          br(),
+
+          # ── Población objetivo vs. muestreada ──────────
+          h5("Población objetivo vs. población muestreada",
+             style = paste0("color:", colores$primario,
+                            "; border-bottom: 2px solid ", colores$borde,
+                            "; padding-bottom: 0.4rem; margin-bottom: 1rem;")),
+
+          card(
+            card_body(
+              tags$svg(
+                xmlns   = "http://www.w3.org/2000/svg",
+                viewBox = "0 0 680 390",
+                style   = "width: 100%; display: block;",
+                role    = "img",
+
+                tags$defs(
+                  tags$pattern(id="grid-a", x="0", y="0", width="22", height="22",
+                               patternUnits="userSpaceOnUse",
+                               tags$rect(width="22", height="22",
+                                         fill="#E1F5EE", stroke="#0F6E56", `stroke-width`="0.5")),
+                  tags$pattern(id="grid-b", x="0", y="0", width="22", height="22",
+                               patternUnits="userSpaceOnUse",
+                               tags$rect(width="22", height="22",
+                                         fill="#E1F5EE", stroke="#0F6E56", `stroke-width`="0.5"))
+                ),
+
+                # ── Situación A: Sin sesgo ──
+                tags$text(x="160", y="22", `text-anchor`="middle",
+                          `font-size`="13", `font-weight`="500", fill="#0C447C",
+                          "Sin sesgo de cobertura"),
+                tags$text(x="160", y="36", `text-anchor`="middle",
+                          `font-size`="11", fill="#185FA5", "el grillado cubre toda el área"),
+                tags$rect(x="30", y="50", width="260", height="230", rx="8",
+                          fill="#E6F1FB", stroke="#185FA5",
+                          `stroke-width`="1", `stroke-dasharray`="6 3"),
+                tags$rect(x="50", y="62", width="220", height="205", rx="4",
+                          fill="url(#grid-a)"),
+                tags$rect(x="50", y="62", width="220", height="205", rx="4",
+                          fill="none", stroke="#0F6E56", `stroke-width`="1.5"),
+                # Etiqueta parcela A
+                tags$circle(cx="100", cy="230", r="2", fill="#5F5E5A"),
+                tags$line(x1="100", y1="232", x2="120", y2="295",
+                          stroke="#5F5E5A", `stroke-width`="0.5", `stroke-dasharray`="3 2"),
+                tags$text(x="122", y="293", `font-size`="11", fill="#444441",
+                          "parcela (unidad de muestreo)"),
+                # Árboles dentro
+                tags$circle(cx="80",  cy="100", r="5", fill="#085041"),
+                tags$circle(cx="118", cy="90",  r="5", fill="#085041"),
+                tags$circle(cx="162", cy="105", r="5", fill="#085041"),
+                tags$circle(cx="208", cy="88",  r="5", fill="#085041"),
+                tags$circle(cx="248", cy="100", r="5", fill="#085041"),
+                tags$circle(cx="70",  cy="145", r="5", fill="#085041"),
+                tags$circle(cx="108", cy="138", r="5", fill="#085041"),
+                tags$circle(cx="150", cy="150", r="5", fill="#085041"),
+                tags$circle(cx="195", cy="135", r="5", fill="#085041"),
+                tags$circle(cx="238", cy="148", r="5", fill="#085041"),
+                tags$circle(cx="260", cy="138", r="5", fill="#085041"),
+                tags$circle(cx="85",  cy="190", r="5", fill="#085041"),
+                tags$circle(cx="128", cy="182", r="5", fill="#085041"),
+                tags$circle(cx="170", cy="197", r="5", fill="#085041"),
+                tags$circle(cx="215", cy="188", r="5", fill="#085041"),
+                tags$circle(cx="252", cy="195", r="5", fill="#085041"),
+                tags$circle(cx="75",  cy="238", r="5", fill="#085041"),
+                tags$circle(cx="118", cy="230", r="5", fill="#085041"),
+                tags$circle(cx="160", cy="244", r="5", fill="#085041"),
+                tags$circle(cx="203", cy="234", r="5", fill="#085041"),
+                tags$circle(cx="245", cy="240", r="5", fill="#085041"),
+                # Leyenda A
+                tags$rect(x="30", y="316", width="22", height="10", rx="2",
+                          fill="none", stroke="#185FA5",
+                          `stroke-width`="1", `stroke-dasharray`="4 2"),
+                tags$text(x="58", y="325", `font-size`="11", fill="#185FA5",
+                          "población objetivo"),
+                tags$rect(x="30", y="332", width="22", height="10", rx="2",
+                          fill="#E1F5EE", stroke="#0F6E56", `stroke-width`="1"),
+                tags$text(x="58", y="341", `font-size`="11", fill="#085041",
+                          "marco (grillado de parcelas)"),
+                tags$circle(cx="41", cy="355", r="5", fill="#085041"),
+                tags$text(x="52", y="359", `font-size`="11", fill="#085041",
+                          "árbol en el marco"),
+
+                # Separador
+                tags$line(x1="340", y1="12", x2="340", y2="378",
+                          stroke="#D3D1C7", `stroke-width`="1", `stroke-dasharray`="4 4"),
+
+                # ── Situación B: Con sesgo ──
+                tags$text(x="510", y="22", `text-anchor`="middle",
+                          `font-size`="13", `font-weight`="500", fill="#791F1F",
+                          "Con sesgo de cobertura"),
+                tags$text(x="510", y="36", `text-anchor`="middle",
+                          `font-size`="11", fill="#A32D2D",
+                          "el grillado cubre solo parte del área"),
+                tags$rect(x="355", y="50", width="310", height="230", rx="8",
+                          fill="#E6F1FB", stroke="#185FA5",
+                          `stroke-width`="1", `stroke-dasharray`="6 3"),
+                tags$rect(x="460", y="80", width="185", height="170", rx="4",
+                          fill="url(#grid-b)"),
+                tags$rect(x="460", y="80", width="185", height="170", rx="4",
+                          fill="none", stroke="#0F6E56", `stroke-width`="1.5"),
+                # Etiqueta parcela B
+                tags$circle(cx="530", cy="210", r="2", fill="#5F5E5A"),
+                tags$line(x1="530", y1="212", x2="530", y2="268",
+                          stroke="#5F5E5A", `stroke-width`="0.5", `stroke-dasharray`="3 2"),
+                tags$text(x="530", y="280", `text-anchor`="middle",
+                          `font-size`="11", fill="#444441",
+                          "parcela (unidad de muestreo)"),
+                # Árboles dentro
+                tags$circle(cx="482", cy="105", r="5", fill="#085041"),
+                tags$circle(cx="520", cy="95",  r="5", fill="#085041"),
+                tags$circle(cx="562", cy="110", r="5", fill="#085041"),
+                tags$circle(cx="602", cy="98",  r="5", fill="#085041"),
+                tags$circle(cx="632", cy="107", r="5", fill="#085041"),
+                tags$circle(cx="475", cy="148", r="5", fill="#085041"),
+                tags$circle(cx="515", cy="140", r="5", fill="#085041"),
+                tags$circle(cx="558", cy="155", r="5", fill="#085041"),
+                tags$circle(cx="598", cy="144", r="5", fill="#085041"),
+                tags$circle(cx="628", cy="150", r="5", fill="#085041"),
+                tags$circle(cx="480", cy="195", r="5", fill="#085041"),
+                tags$circle(cx="522", cy="188", r="5", fill="#085041"),
+                tags$circle(cx="565", cy="200", r="5", fill="#085041"),
+                tags$circle(cx="605", cy="192", r="5", fill="#085041"),
+                tags$circle(cx="635", cy="198", r="5", fill="#085041"),
+                tags$circle(cx="488", cy="238", r="5", fill="#085041"),
+                tags$circle(cx="530", cy="232", r="5", fill="#085041"),
+                tags$circle(cx="572", cy="244", r="5", fill="#085041"),
+                tags$circle(cx="612", cy="236", r="5", fill="#085041"),
+                # Árboles fuera
+                tags$circle(cx="372", cy="80",  r="5", fill="#E24B4A"),
+                tags$circle(cx="400", cy="72",  r="5", fill="#E24B4A"),
+                tags$circle(cx="430", cy="82",  r="5", fill="#E24B4A"),
+                tags$circle(cx="370", cy="120", r="5", fill="#E24B4A"),
+                tags$circle(cx="405", cy="112", r="5", fill="#E24B4A"),
+                tags$circle(cx="438", cy="125", r="5", fill="#E24B4A"),
+                tags$circle(cx="375", cy="162", r="5", fill="#E24B4A"),
+                tags$circle(cx="410", cy="155", r="5", fill="#E24B4A"),
+                tags$circle(cx="440", cy="168", r="5", fill="#E24B4A"),
+                tags$circle(cx="378", cy="205", r="5", fill="#E24B4A"),
+                tags$circle(cx="412", cy="198", r="5", fill="#E24B4A"),
+                tags$circle(cx="442", cy="210", r="5", fill="#E24B4A"),
+                tags$circle(cx="382", cy="248", r="5", fill="#E24B4A"),
+                tags$circle(cx="415", cy="240", r="5", fill="#E24B4A"),
+                tags$circle(cx="444", cy="252", r="5", fill="#E24B4A"),
+                # Etiqueta zona excluida
+                tags$rect(x="352", y="292", width="100", height="34", rx="4",
+                          fill="#FCEBEB", stroke="#A32D2D", `stroke-width`="0.5"),
+                tags$text(x="402", y="305", `text-anchor`="middle",
+                          `font-size`="11", fill="#791F1F", "fuera del marco"),
+                tags$text(x="402", y="319", `text-anchor`="middle",
+                          `font-size`="11", fill="#791F1F", "probabilidad = 0"),
+                # Leyenda B
+                tags$circle(cx="368", cy="340", r="5", fill="#E24B4A"),
+                tags$text(x="380", y="344", `font-size`="11", fill="#791F1F",
+                          "árbol fuera del marco"),
+                tags$circle(cx="368", cy="358", r="5", fill="#E24B4A"),
+                tags$text(x="380", y="362", `font-size`="11", fill="#791F1F",
+                          "no puede ser muestreado → sesgo")
+              ),
+              p(class = "text-muted small mt-2 mb-0",
+                "Cuando el marco de muestreo no cubre toda la población objetivo,
+                 los individuos fuera del marco nunca pueden ser seleccionados.
+                 Esto introduce un sesgo sistemático que no puede corregirse
+                 aumentando el tamaño de muestra.")
+            )
+          ),
+
+          br(),
+
+          # ── Términos clave ──────────────────────────────
+          h5("Términos clave",
+             style = paste0("color:", colores$primario,
+                            "; border-bottom: 2px solid ", colores$borde,
+                            "; padding-bottom: 0.4rem; margin-bottom: 1rem;")),
+
+          layout_columns(
+            col_widths = c(4, 4, 4, 4, 4),
+            gap = "8px",
+
+            card(
+              class = "h-100",
+              card_header(bs_icon("bullseye"), " Población objetivo"),
+              card_body(
+                p(class = "small mb-0",
+                  "La población sobre la cual se quieren hacer inferencias.
+                   Debe estar claramente definida antes de diseñar el muestreo.")
+              )
+            ),
+            card(
+              class = "h-100",
+              card_header(bs_icon("grid-3x3"), " Marco de muestreo"),
+              card_body(
+                p(class = "small mb-0",
+                  "Lista o mapa de todas las unidades de muestreo disponibles.
+                   Define la población muestreada — la que queda dentro del marco.")
+              )
+            ),
+            card(
+              class = "h-100",
+              card_header(bs_icon("square"), " Unidad de muestreo"),
+              card_body(
+                p(class = "small mb-0",
+                  "La unidad básica que se selecciona para ser medida: una parcela,
+                   un transecto, una trampa, un individuo. Puede contener varios elementos.")
+              )
+            ),
+            card(
+              class = "h-100",
+              card_header(bs_icon("dot"), " Elemento"),
+              card_body(
+                p(class = "small mb-0",
+                  "El objeto de interés dentro de la unidad de muestreo: un árbol,
+                   un individuo, una observación. Es lo que se mide finalmente.")
+              )
+            ),
+            card(
+              class = "h-100",
+              card_header(bs_icon("collection"), " Muestra"),
+              card_body(
+                p(class = "small mb-0",
+                  "El subconjunto de unidades seleccionadas del marco de muestreo.
+                   Debe ser representativa de la población objetivo para que las
+                   inferencias sean válidas.")
+              )
+            )
+          ),
+
+          br(),
+
+          # ── Fuentes de variación ────────────────────────
+          h5("Fuentes de variación",
+             style = paste0("color:", colores$primario,
+                            "; border-bottom: 2px solid ", colores$borde,
+                            "; padding-bottom: 0.4rem; margin-bottom: 1rem;")),
+
+          tags$svg(
+            xmlns   = "http://www.w3.org/2000/svg",
+            viewBox = "0 0 680 160",
+            style   = "width: 100%; display: block; margin-bottom: 0.5rem;",
+            role    = "img",
+
+            # Panel 1: Variación temporal (azul)
+            tags$rect(x="20", y="10", width="190", height="140", rx="10",
+                      fill="#E6F1FB", stroke="#185FA5", `stroke-width`="0.5"),
+            tags$text(x="115", y="35", `text-anchor`="middle",
+                      `dominant-baseline`="central", `font-size`="13",
+                      `font-weight`="500", fill="#0C447C", "Variación temporal"),
+            tags$path(d="M40 115 C60 85, 80 125, 100 90 C120 55, 140 110, 160 78 C175 55, 185 100, 200 82",
+                      fill="none", stroke="#185FA5", `stroke-width`="1.5"),
+            tags$line(x1="35", y1="120", x2="205", y2="120",
+                      stroke="#185FA5", `stroke-width`="0.5", opacity="0.4"),
+            tags$text(x="42", y="134", `text-anchor`="middle",
+                      `dominant-baseline`="central", `font-size`="11",
+                      fill="#185FA5", opacity="0.7", "t₁"),
+            tags$text(x="198", y="134", `text-anchor`="middle",
+                      `dominant-baseline`="central", `font-size`="11",
+                      fill="#185FA5", opacity="0.7", "t₂"),
+
+            # Panel 2: Variación espacial (teal)
+            tags$rect(x="245", y="10", width="190", height="140", rx="10",
+                      fill="#E1F5EE", stroke="#0F6E56", `stroke-width`="0.5"),
+            tags$text(x="340", y="35", `text-anchor`="middle",
+                      `dominant-baseline`="central", `font-size`="13",
+                      `font-weight`="500", fill="#085041", "Variación espacial"),
+            tags$circle(cx="275", cy="80", r="5", fill="#0F6E56", opacity="0.7"),
+            tags$circle(cx="285", cy="65", r="5", fill="#0F6E56", opacity="0.7"),
+            tags$circle(cx="278", cy="95", r="5", fill="#0F6E56", opacity="0.7"),
+            tags$circle(cx="293", cy="78", r="5", fill="#0F6E56", opacity="0.7"),
+            tags$circle(cx="288", cy="55", r="3", fill="#0F6E56", opacity="0.4"),
+            tags$circle(cx="340", cy="110", r="5", fill="#0F6E56", opacity="0.7"),
+            tags$circle(cx="352", cy="100", r="5", fill="#0F6E56", opacity="0.7"),
+            tags$circle(cx="345", cy="125", r="5", fill="#0F6E56", opacity="0.7"),
+            tags$circle(cx="395", cy="70",  r="3", fill="#0F6E56", opacity="0.3"),
+            tags$circle(cx="405", cy="85",  r="3", fill="#0F6E56", opacity="0.3"),
+            tags$circle(cx="390", cy="90",  r="3", fill="#0F6E56", opacity="0.3"),
+
+            # Panel 3: Variación de muestreo (ámbar)
+            tags$rect(x="470", y="10", width="190", height="140", rx="10",
+                      fill="#FAEEDA", stroke="#BA7517", `stroke-width`="0.5"),
+            tags$text(x="565", y="35", `text-anchor`="middle",
+                      `dominant-baseline`="central", `font-size`="13",
+                      `font-weight`="500", fill="#633806", "Variabilidad de muestreo"),
+            tags$rect(x="485", y="55", width="65", height="65", rx="4",
+                      fill="none", stroke="#BA7517", `stroke-width`="1",
+                      `stroke-dasharray`="3 2", opacity="0.6"),
+            tags$circle(cx="500", cy="80",  r="4", fill="#854F0B", opacity="0.7"),
+            tags$circle(cx="515", cy="68",  r="4", fill="#854F0B", opacity="0.7"),
+            tags$circle(cx="530", cy="88",  r="4", fill="#854F0B", opacity="0.7"),
+            tags$circle(cx="508", cy="102", r="4", fill="#854F0B", opacity="0.7"),
+            tags$rect(x="570", y="55", width="65", height="65", rx="4",
+                      fill="none", stroke="#BA7517", `stroke-width`="1",
+                      `stroke-dasharray`="3 2", opacity="0.6"),
+            tags$circle(cx="585", cy="75",  r="4", fill="#854F0B", opacity="0.7"),
+            tags$circle(cx="600", cy="95",  r="4", fill="#854F0B", opacity="0.7"),
+            tags$circle(cx="618", cy="80",  r="4", fill="#854F0B", opacity="0.7"),
+            tags$circle(cx="594", cy="110", r="4", fill="#854F0B", opacity="0.7"),
+            tags$text(x="520", y="130", `text-anchor`="middle",
+                      `dominant-baseline`="central", `font-size`="11",
+                      fill="#854F0B", "muestra 1"),
+            tags$text(x="603", y="130", `text-anchor`="middle",
+                      `dominant-baseline`="central", `font-size`="11",
+                      fill="#854F0B", "muestra 2")
+          ),
+
+          layout_columns(
+            col_widths = c(4, 4, 4),
+            gap = "8px",
+            p(class = "small text-muted mb-0",
+              tags$strong("Temporal:"), " variabilidad asociada al período de tiempo
+               del muestreo. Las poblaciones cambian estacionalmente y entre años."),
+            p(class = "small text-muted mb-0",
+              tags$strong("Espacial:"), " variabilidad asociada a la distribución
+               parchosa de individuos. Las especies rara vez se distribuyen homogéneamente."),
+            p(class = "small text-muted mb-0",
+              tags$strong("De muestreo:"), " variabilidad debida al proceso de
+               seleccionar unidades al azar. Distintas muestras dan distintos resultados.")
+          )
+        )
+      ),
+
       # ── Pestaña 1: Diseños ──────────────────────────────
       nav_panel(
-        "Diseños de muestreo",
+        title = tagList(bs_icon("grid-3x3-gap", class = "me-1"), "Diseños de muestreo"),
 
         div(
           class = "p-3",
@@ -224,7 +680,7 @@ mod_muestreo_ui <- function(id) {
 
       # ── Pestaña 2: Esquema visual ────────────────────────
       nav_panel(
-        "Esquema visual",
+        title = tagList(bs_icon("image", class = "me-1"), "Esquema visual"),
 
         div(
           class = "p-3",
@@ -283,7 +739,7 @@ mod_muestreo_ui <- function(id) {
 
       # ── Pestaña 3: Calculadora ──────────────────────────
       nav_panel(
-        "Calculadora de tamaño de muestra",
+        title = tagList(bs_icon("calculator", class = "me-1"), "Calculadora de tamaño de muestra"),
 
         div(
           class = "p-3",
