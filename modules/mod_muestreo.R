@@ -394,3 +394,4 @@ mod_fundamentos_server <- function(id) {
     # Sin lógica reactiva por ahora
   })
 }
+
