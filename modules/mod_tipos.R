@@ -1,145 +1,110 @@
 # ============================================================
 # mod_tipos.R — Módulo: Tipos de estudio
-# Descriptivo · Observacional/Correlacional · Experimental
+# Estructura: navset_card_tab (una pestaña por tipo)
 # ============================================================
+
+# ── Helpers internos ──────────────────────────────────────
+
+# Construye el contenido de una pestaña dado un item de tipos_estudio
+tab_contenido <- function(t) {
+  tagList(
+
+    # Definición
+    div(
+      class = "mb-3 mt-2",
+      p(t$definicion, class = "lead", style = "color: #57606C;")
+    ),
+
+    # Características + Limitaciones
+    layout_columns(
+      col_widths = c(6, 6),
+
+      card(
+        card_header("Características"),
+        tags$ul(
+          lapply(t$caracteristicas, tags$li)
+        )
+      ),
+
+      card(
+        card_header("Limitaciones"),
+        tags$ul(
+          lapply(t$limitaciones, tags$li)
+        )
+      )
+    ),
+
+    # ¿Cuándo usar?
+    card(
+      card_header("¿Cuándo usar?"),
+      p(t$cuando, class = "mb-0")
+    ),
+
+    # Aplicaciones frecuentes
+    card(
+      card_header("Aplicaciones frecuentes en ciencias ambientales y recursos naturales"),
+      div(
+        lapply(seq_along(t$diseños), function(i) {
+          div(
+            class = "card-muestreo",
+            strong(names(t$diseños)[i]),
+            p(t$diseños[[i]], class = "mb-0 small text-muted")
+          )
+        })
+      )
+    ),
+
+    # Estadísticos típicos
+    card(
+      card_header("Estadísticos típicos"),
+      p(t$estadisticas, class = "mb-0")
+    ),
+
+    # Ejemplo
+    card(
+      card_header("Ejemplo ambiental"),
+      div(
+        class = "wiz-result",
+        p(t$ejemplo, class = "mb-0 fst-italic")
+      )
+    )
+  )
+}
 
 # ── UI ────────────────────────────────────────────────────
 mod_tipos_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
+    navset_card_tab(
+      id = ns("tabs_tipos"),
 
-    layout_sidebar(
-      fillable = FALSE,
-
-      # ── Sidebar: selector de tipo ──────────────────────
-      sidebar = sidebar(
-        width = 220,
-        title = "Tipo de estudio",
-
-        radioButtons(
-          ns("tipo_sel"),
-          label    = NULL,
-          choices  = c(
-            "📋 Descriptivo"               = "descriptivo",
-            "🔗 Observacional / Correlacional" = "observacional",
-            "🧪 Experimental"              = "experimental"
-          ),
-          selected = "descriptivo"
-        ),
-
-        hr(),
-
-        div(
-          class = "small text-muted",
-          "Selecciona un tipo para explorar su definición, características principales, contextos de aplicación y un ejemplo concreto."
-        )
+      nav_panel(
+        title = tagList(bsicons::bs_icon("clipboard-data"), " Descriptivo"),
+        value = "descriptivo",
+        tab_contenido(tipos_estudio$descriptivo)
       ),
 
-      # ── Contenido principal ────────────────────────────
-      div(
+      nav_panel(
+        title = tagList(bsicons::bs_icon("diagram-2"), " Observacional / Correlacional"),
+        value = "observacional",
+        tab_contenido(tipos_estudio$observacional)
+      ),
 
-        # Encabezado dinámico
-        uiOutput(ns("encabezado")),
-
-        hr(),
-
-        # Fila: características + limitaciones
-        layout_columns(
-          col_widths = c(6, 6),
-
-          card(
-            card_header("Características"),
-            uiOutput(ns("caracteristicas"))
-          ),
-
-          card(
-            card_header("Limitaciones"),
-            uiOutput(ns("limitaciones"))
-          )
-        ),
-
-        # Diseños frecuentes
-        card(
-          card_header("Aplicaciones frecuentes en ciencias ambientales y recursos naturales"),
-          uiOutput(ns("disenios"))
-        ),
-
-        # Estadísticas típicas
-        card(
-          card_header("Estadísticos típicos"),
-          uiOutput(ns("estadisticas"))
-        ),
-
-        # Ejemplo
-        card(
-          card_header("Ejemplo ambiental"),
-          uiOutput(ns("ejemplo"))
-        )
+      nav_panel(
+        title = tagList(bsicons::bs_icon("eyedropper"), " Experimental"),
+        value = "experimental",
+        tab_contenido(tipos_estudio$experimental)
       )
     )
   )
 }
 
 # ── Server ────────────────────────────────────────────────
+# El contenido es estático (construido en UI desde tipos_estudio),
+# por lo que el server no necesita renderUI reactivo.
 mod_tipos_server <- function(id) {
   moduleServer(id, function(input, output, session) {
-
-    # Tipo seleccionado (reactivo)
-    tipo_actual <- reactive({
-      tipos_estudio[[input$tipo_sel]]
-    })
-
-    # Encabezado
-    output$encabezado <- renderUI({
-      t <- tipo_actual()
-      div(
-        h3(paste(t$icono, t$nombre),
-           style = paste0("color:", colores$primario, "; margin-bottom: 0.25rem;")),
-        p(t$definicion, class = "lead", style = "color: #57606C;")
-      )
-    })
-
-    # Características
-    output$caracteristicas <- renderUI({
-      tags$ul(
-        lapply(tipo_actual()$caracteristicas, function(x) tags$li(x))
-      )
-    })
-
-    # Limitaciones
-    output$limitaciones <- renderUI({
-      tags$ul(
-        lapply(tipo_actual()$limitaciones, function(x) tags$li(x))
-      )
-    })
-
-    # Diseños frecuentes
-    output$disenios <- renderUI({
-      d <- tipo_actual()$diseños
-      div(
-        lapply(seq_along(d), function(i) {
-          div(
-            class = "card-muestreo",
-            strong(names(d)[i]),
-            p(d[[i]], class = "mb-0 small text-muted")
-          )
-        })
-      )
-    })
-
-    # Estadísticas típicas
-    output$estadisticas <- renderUI({
-      p(tipo_actual()$estadisticas)
-    })
-
-    # Ejemplo
-    output$ejemplo <- renderUI({
-      div(
-        class = "wiz-result",
-        p(tipo_actual()$ejemplo, class = "mb-0 fst-italic")
-      )
-    })
-
+    # Sin lógica reactiva necesaria — navset_card_tab maneja la navegación.
   })
 }

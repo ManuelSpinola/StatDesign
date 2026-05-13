@@ -19,7 +19,7 @@ mod_fundamentos_ui <- function(id) {
 
       # ── Tab 1: Aleatorización ──────────────────────────
       nav_panel(
-        "Aleatorización",
+        title = tagList(bs_icon("shuffle"), " Aleatorización"),
         card_body(
           layout_columns(
             col_widths = c(12),
@@ -89,7 +89,7 @@ mod_fundamentos_ui <- function(id) {
 
       # ── Tab 2: Replicación ─────────────────────────────
       nav_panel(
-        "Replicación",
+        title = tagList(bs_icon("copy"), " Replicación"),
         card_body(
           layout_columns(
             col_widths = c(12),
@@ -163,7 +163,7 @@ mod_fundamentos_ui <- function(id) {
 
       # ── Tab 3: Control ─────────────────────────────────
       nav_panel(
-        "Control",
+        title = tagList(bs_icon("sliders"), " Control"),
         card_body(
           layout_columns(
             col_widths = c(12),
@@ -231,7 +231,7 @@ mod_fundamentos_ui <- function(id) {
 
       # ── Tab 4: Pseudoreplicación ───────────────────────
       nav_panel(
-        "Pseudoreplicación",
+        title = tagList(bs_icon("exclamation-triangle"), " Pseudoreplicación"),
         card_body(
           layout_columns(
             col_widths = c(12),

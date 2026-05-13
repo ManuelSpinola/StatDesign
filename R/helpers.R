@@ -49,6 +49,21 @@ tema_app <- bs_theme(
                   padding-top: 0 !important; padding-bottom: 0 !important; }
   .navbar .nav-link { color: #ffffff !important; }
   .navbar .nav-link.active { border-bottom: 2px solid #FC7D0B; }
+  .nav-tabs .nav-link.active,
+  .nav-tabs .nav-item .nav-link.active,
+  ul.nav.nav-tabs li.nav-item a.nav-link.active {
+    background-color: #1170AA !important;
+    color: #ffffff !important;
+    border-top-color: #1170AA !important;
+    border-left-color: #1170AA !important;
+    border-right-color: #1170AA !important;
+    border-bottom-color: transparent !important;
+    font-weight: 600 !important;
+  }
+  .nav-tabs .nav-link:not(.active):hover {
+    background-color: #EEF3FA !important;
+    color: #1170AA !important;
+  }
   .btn-primary { background-color: #FC7D0B; border-color: #FC7D0B; color: #ffffff; }
   .btn-primary:hover { background-color: #d4680a; border-color: #d4680a; }
   .card-header { background-color: #EEF3FA; font-weight: 700;
@@ -247,11 +262,11 @@ diseños_muestreo <- list(
     items  = list(
       list(
         nombre     = "Transectos",
-        desc       = "Líneas de muestreo a lo largo de las cuales se registran organismos o variables.",
-        cuando     = "Vegetación, aves, mamíferos, cobertura de suelo.",
-        ventaja    = "Cubre gradientes espaciales, eficiente en terreno.",
-        limitacion = "Puede sesgar si los transectos siguen rutas preferibles (senderos).",
-        ejemplo    = "Transectos de 500 m para estimar densidad de palmas en un bosque tropical húmedo."
+        desc       = "Líneas de muestreo recorridas a pie, en vehículo o embarcación. Existen dos variantes: ancho fijo (banda), donde se registra todo lo detectado dentro de una franja definida; y Distance sampling, donde se registra la distancia perpendicular al avistamiento para estimar densidad corrigiendo por detectabilidad.",
+        cuando     = "Ancho fijo: cobertura vegetal, invertebrados, huellas y rastros. Distance sampling: aves, mamíferos y cualquier organismo cuya detectabilidad disminuye con la distancia al transecto.",
+        ventaja    = "Cubre gradientes espaciales y es eficiente en terreno; Distance sampling permite estimar densidad absoluta sin necesidad de detectar todos los individuos.",
+        limitacion = "El sesgo aumenta si los transectos siguen senderos o rutas no aleatorias; Distance sampling requiere registrar distancias con precisión y asumir detección perfecta sobre la línea.",
+        ejemplo    = "Transectos de 500 m con Distance sampling para estimar densidad de mamíferos medianos en un bosque tropical."
       ),
       list(
         nombre     = "Parcelas",
