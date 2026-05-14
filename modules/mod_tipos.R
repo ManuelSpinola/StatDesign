@@ -18,8 +18,11 @@ tab_contenido <- function(t) {
     # Características + Limitaciones
     layout_columns(
       col_widths = c(6, 6),
+      fill       = FALSE,
 
       card(
+        full_screen = FALSE,
+        height      = NULL,
         card_header("Características"),
         tags$ul(
           lapply(t$caracteristicas, tags$li)
@@ -27,6 +30,8 @@ tab_contenido <- function(t) {
       ),
 
       card(
+        full_screen = FALSE,
+        height      = NULL,
         card_header("Limitaciones"),
         tags$ul(
           lapply(t$limitaciones, tags$li)
@@ -36,12 +41,16 @@ tab_contenido <- function(t) {
 
     # ¿Cuándo usar?
     card(
+      fill        = FALSE,
+      full_screen = FALSE,
       card_header("¿Cuándo usar?"),
       p(t$cuando, class = "mb-0")
     ),
 
     # Aplicaciones frecuentes
     card(
+      fill        = FALSE,
+      full_screen = FALSE,
       card_header("Aplicaciones frecuentes en ciencias ambientales y recursos naturales"),
       div(
         lapply(seq_along(t$diseños), function(i) {
@@ -56,12 +65,16 @@ tab_contenido <- function(t) {
 
     # Estadísticos típicos
     card(
+      fill        = FALSE,
+      full_screen = FALSE,
       card_header("Estadísticos típicos"),
       p(t$estadisticas, class = "mb-0")
     ),
 
     # Ejemplo
     card(
+      fill        = FALSE,
+      full_screen = FALSE,
       card_header("Ejemplo ambiental"),
       div(
         class = "wiz-result",
@@ -80,20 +93,23 @@ mod_tipos_ui <- function(id) {
       id = ns("tabs_tipos"),
 
       nav_panel(
-        title = tagList(bsicons::bs_icon("clipboard-data"), " Descriptivo"),
-        value = "descriptivo",
+        title    = tagList(bsicons::bs_icon("clipboard-data"), " Descriptivo"),
+        value    = "descriptivo",
+        fillable = FALSE,
         tab_contenido(tipos_estudio$descriptivo)
       ),
 
       nav_panel(
-        title = tagList(bsicons::bs_icon("diagram-2"), " Observacional / Correlacional"),
-        value = "observacional",
+        title    = tagList(bsicons::bs_icon("diagram-2"), " Observacional / Correlacional"),
+        value    = "observacional",
+        fillable = FALSE,
         tab_contenido(tipos_estudio$observacional)
       ),
 
       nav_panel(
-        title = tagList(bsicons::bs_icon("eyedropper"), " Experimental"),
-        value = "experimental",
+        title    = tagList(bsicons::bs_icon("eyedropper"), " Experimental"),
+        value    = "experimental",
+        fillable = FALSE,
         tab_contenido(tipos_estudio$experimental)
       )
     )
