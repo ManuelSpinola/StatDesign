@@ -66,8 +66,10 @@ tema_app <- bs_theme(
   }
   .btn-primary { background-color: #FC7D0B; border-color: #FC7D0B; color: #ffffff; }
   .btn-primary:hover { background-color: #d4680a; border-color: #d4680a; }
-  .card-header { background-color: #EEF3FA; font-weight: 700;
-                 border-bottom: 2px solid #C8D9EC; }
+  .card > .card-header { background-color: #C8D9EC; color: #1170AA; font-weight: 700;
+                         border-bottom: none; }
+  .card > .card-header:has(.nav-tabs) { background-color: transparent; color: inherit;
+                                        border-bottom: revert; }
   .navbar-brand { display: flex !important; align-items: center !important;
                   padding-top: 0 !important; padding-bottom: 0 !important; }
 
