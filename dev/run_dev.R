@@ -1,3 +1,3 @@
 pkgload::load_all()
-StatDesign::run_app()
+run_app()
 
