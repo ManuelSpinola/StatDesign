@@ -269,7 +269,7 @@
     "StatDesign": {
       "Package": "StatDesign",
       "Version": "1.0.0",
-      "Source": "unknown",
+      "Source": "GitHub",
       "Title": "Interactive Study Design and Sampling Platform",
       "Authors@R": "person(\"Manuel\", \"Spínola\",  email = \"manuel.spinola@una.ac.cr\", role  = c(\"aut\", \"cre\"), comment = c(ORCID = \"\"))",
       "Description": "A Shiny-based interactive platform for study design and sampling, part of the StatSuite ecosystem. Includes modules for study types, sampling designs, design fundamentals, and an interactive assistant. Designed for teaching and research in ecology and biodiversity sciences.",
@@ -284,7 +284,8 @@
         "shinyjs",
         "ggplot2",
         "dplyr",
-        "golem"
+        "golem",
+        "pkgload"
       ],
       "Suggests": [
         "testthat (>= 3.0.0)"
@@ -292,6 +293,12 @@
       "Config/testthat/edition": "3",
       "URL": "https://github.com/ManuelSpinola/StatDesign",
       "BugReports": "https://github.com/ManuelSpinola/StatDesign/issues",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "StatDesign",
+      "RemoteUsername": "ManuelSpinola",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "88f6e09c241abb90f4cee4a810928bec6425d518",
       "NeedsCompilation": "no",
       "Author": "Manuel Spínola [aut, cre]",
       "Maintainer": "Manuel Spínola <manuel.spinola@una.ac.cr>",
