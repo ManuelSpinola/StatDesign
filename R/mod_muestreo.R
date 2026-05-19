@@ -181,14 +181,14 @@ esquema_ggplot <- function(tipo, colores) {
 mod_muestreo_ui <- function(id) {
   ns <- NS(id)
 
-  nav_panel(
+  bslib::nav_panel(
     title = "Diseños de muestreo",
 
-    navset_card_tab(
+    bslib::navset_card_tab(
 
       # ── Pestaña 0: Conceptos básicos ───────────────────
-      nav_panel(
-        title = tagList(bs_icon("book", class = "me-1"), "Conceptos básicos"),
+      bslib::nav_panel(
+        title = tagList(bsicons::bs_icon("book", class = "me-1"), "Conceptos básicos"),
 
         div(
           class = "p-3",
@@ -207,8 +207,8 @@ mod_muestreo_ui <- function(id) {
                             "; border-bottom: 2px solid ", colores$borde,
                             "; padding-bottom: 0.4rem; margin-bottom: 1rem;")),
 
-          card(
-            card_body(
+          bslib::card(
+            bslib::card_body(
               tags$svg(
                 xmlns   = "http://www.w3.org/2000/svg",
                 viewBox = "0 0 680 130",
@@ -335,8 +335,8 @@ mod_muestreo_ui <- function(id) {
                             "; border-bottom: 2px solid ", colores$borde,
                             "; padding-bottom: 0.4rem; margin-bottom: 1rem;")),
 
-          card(
-            card_body(
+          bslib::card(
+            bslib::card_body(
               tags$svg(
                 xmlns   = "http://www.w3.org/2000/svg",
                 viewBox = "0 0 680 390",
@@ -501,52 +501,52 @@ mod_muestreo_ui <- function(id) {
                             "; border-bottom: 2px solid ", colores$borde,
                             "; padding-bottom: 0.4rem; margin-bottom: 1rem;")),
 
-          layout_columns(
+          bslib::layout_columns(
             col_widths = c(4, 4, 4, 4, 4),
             gap = "8px",
 
-            card(
+            bslib::card(
               class = "h-100",
-              card_header(bs_icon("bullseye"), " Población objetivo"),
-              card_body(
+              bslib::card_header(bsicons::bs_icon("bullseye"), " Población objetivo"),
+              bslib::card_body(
                 p(class = "small mb-0",
                   "La población sobre la cual se quieren hacer inferencias.
                    Debe estar claramente definida antes de diseñar el muestreo.")
               )
             ),
-            card(
+            bslib::card(
               class = "h-100",
-              card_header(bs_icon("grid-3x3"), " Marco de muestreo"),
-              card_body(
+              bslib::card_header(bsicons::bs_icon("grid-3x3"), " Marco de muestreo"),
+              bslib::card_body(
                 p(class = "small mb-0",
                   "Lista o mapa de todas las unidades de muestreo disponibles.
                    Define la población muestreada — la que queda dentro del marco.")
               )
             ),
-            card(
+            bslib::card(
               class = "h-100",
-              card_header(bs_icon("square"), " Unidad de muestreo"),
-              card_body(
+              bslib::card_header(bsicons::bs_icon("square"), " Unidad de muestreo"),
+              bslib::card_body(
                 p(class = "small mb-0",
                   "La unidad que se selecciona del marco: una parcela, un transecto,
                    un individuo. En diseños simples ", strong("coincide con el elemento"),
                   "; solo difieren en muestreo por conglomerados.")
               )
             ),
-            card(
+            bslib::card(
               class = "h-100",
-              card_header(bs_icon("dot"), " Elemento"),
-              card_body(
+              bslib::card_header(bsicons::bs_icon("dot"), " Elemento"),
+              bslib::card_body(
                 p(class = "small mb-0",
                   "El objeto sobre el que se toma la medición: un árbol, un individuo,
                    una observación. Frecuentemente es la misma entidad que la unidad
                    de muestreo.")
               )
             ),
-            card(
+            bslib::card(
               class = "h-100",
-              card_header(bs_icon("collection"), " Muestra"),
-              card_body(
+              bslib::card_header(bsicons::bs_icon("collection"), " Muestra"),
+              bslib::card_body(
                 p(class = "small mb-0",
                   "El subconjunto de unidades seleccionadas del marco de muestreo.
                    Debe ser representativa de la población objetivo para que las
@@ -632,7 +632,7 @@ mod_muestreo_ui <- function(id) {
                       fill="#854F0B", "muestra 2")
           ),
 
-          layout_columns(
+          bslib::layout_columns(
             col_widths = c(4, 4, 4),
             gap = "8px",
             p(class = "small text-muted mb-0",
@@ -649,8 +649,8 @@ mod_muestreo_ui <- function(id) {
       ),
 
       # ── Pestaña 1: Diseños ──────────────────────────────
-      nav_panel(
-        title = tagList(bs_icon("grid-3x3-gap", class = "me-1"), "Diseños de muestreo"),
+      bslib::nav_panel(
+        title = tagList(bsicons::bs_icon("grid-3x3-gap", class = "me-1"), "Diseños de muestreo"),
 
         div(
           class = "p-3",
@@ -685,8 +685,8 @@ mod_muestreo_ui <- function(id) {
       ),
 
       # ── Pestaña 2: Esquema visual ────────────────────────
-      nav_panel(
-        title = tagList(bs_icon("image", class = "me-1"), "Esquema visual"),
+      bslib::nav_panel(
+        title = tagList(bsicons::bs_icon("image", class = "me-1"), "Esquema visual"),
 
         div(
           class = "p-3",
@@ -730,8 +730,8 @@ mod_muestreo_ui <- function(id) {
             ),
 
             div(
-              card(
-                card_header("Representación espacial"),
+              bslib::card(
+                bslib::card_header("Representación espacial"),
                 plotOutput(ns("esquema_plot"), height = "320px")
               ),
 
@@ -744,8 +744,8 @@ mod_muestreo_ui <- function(id) {
       ),
 
       # ── Pestaña 3: Calculadora ──────────────────────────
-      nav_panel(
-        title = tagList(bs_icon("calculator", class = "me-1"), "Calculadora de tamaño de muestra"),
+      bslib::nav_panel(
+        title = tagList(bsicons::bs_icon("calculator", class = "me-1"), "Calculadora de tamaño de muestra"),
 
         div(
           class = "p-3",
@@ -776,8 +776,8 @@ mod_muestreo_ui <- function(id) {
       ),
 
       # ── Pestaña 4: Ejercicio MAS ────────────────────────
-      nav_panel(
-        title = tagList(bs_icon("play-circle", class = "me-1"), "Ejercicio"),
+      bslib::nav_panel(
+        title = tagList(bsicons::bs_icon("play-circle", class = "me-1"), "Ejercicio"),
 
         div(
           class = "p-3",
@@ -789,15 +789,15 @@ mod_muestreo_ui <- function(id) {
             class = "text-muted mb-4"
           ),
 
-          layout_columns(
+          bslib::layout_columns(
             col_widths = c(3, 9),
 
             # ── Sidebar de controles ──────────────────────
-            card(
-              card_header(
-                tagList(bs_icon("sliders", class = "me-1"), "Parámetros del ejercicio")
+            bslib::card(
+              bslib::card_header(
+                tagList(bsicons::bs_icon("sliders", class = "me-1"), "Parámetros del ejercicio")
               ),
-              card_body(
+              bslib::card_body(
 
                 numericInput(
                   ns("ej_N"),
@@ -853,7 +853,7 @@ mod_muestreo_ui <- function(id) {
 
                 div(
                   class = "small text-muted",
-                  bs_icon("info-circle"), " ",
+                  bsicons::bs_icon("info-circle"), " ",
                   "El DAP se simula con distribución normal truncada (DAP mínimo: 1 cm).
                    Cada clic en «Tomar muestra» genera una selección aleatoria distinta."
                 )
@@ -869,9 +869,9 @@ mod_muestreo_ui <- function(id) {
               br(),
 
               # Gráfico
-              card(
-                card_header(
-                  tagList(bs_icon("bar-chart", class = "me-1"),
+              bslib::card(
+                bslib::card_header(
+                  tagList(bsicons::bs_icon("bar-chart", class = "me-1"),
                           "Distribución de DAP — población y muestra")
                 ),
                 plotOutput(ns("ej_plot"), height = "320px")
@@ -880,12 +880,12 @@ mod_muestreo_ui <- function(id) {
               br(),
 
               # Tabla
-              card(
-                card_header(
-                  tagList(bs_icon("table", class = "me-1"),
+              bslib::card(
+                bslib::card_header(
+                  tagList(bsicons::bs_icon("table", class = "me-1"),
                           "Unidades seleccionadas en la muestra")
                 ),
-                card_body(
+                bslib::card_body(
                   uiOutput(ns("ej_tabla_wrap"))
                 )
               )
@@ -908,12 +908,12 @@ mod_muestreo_server <- function(id) {
       badge <- diseños_muestreo[[grupo]]$badge
 
       renderUI({
-        layout_columns(
+        bslib::layout_columns(
           col_widths = rep(6, length(items)),
           !!!lapply(items, function(d) {
-            card(
+            bslib::card(
               class = "card-muestreo",
-              card_header(
+              bslib::card_header(
                 div(
                   span(class = paste("badge badge-", badge, " me-2", sep = ""), badge_label(badge)),
                   strong(d$nombre)
@@ -1136,7 +1136,7 @@ mod_muestreo_server <- function(id) {
       if (tipo %in% c("prop", "media")) {
         # Panel de estimación (igual que antes)
         div(
-          layout_columns(
+          bslib::layout_columns(
             col_widths = c(4, 4, 4),
             value_box(title = "Muestra base (n\u2080)", value = textOutput(ns("res_n0")),
                       showcase = bsicons::bs_icon("people-fill"), theme = "primary"),
@@ -1146,15 +1146,15 @@ mod_muestreo_server <- function(id) {
                       showcase = bsicons::bs_icon("percent"), theme = "secondary")
           ),
           br(),
-          card(card_header("Interpretación"),  uiOutput(ns("interpretacion"))),
-          card(card_header("Guía pedagógica"), uiOutput(ns("pedagogico"))),
-          card(card_header("Fórmula"),         uiOutput(ns("formula_detalle"))),
-          card(
-            card_header(
+          bslib::card(bslib::card_header("Interpretación"),  uiOutput(ns("interpretacion"))),
+          bslib::card(bslib::card_header("Guía pedagógica"), uiOutput(ns("pedagogico"))),
+          bslib::card(bslib::card_header("Fórmula"),         uiOutput(ns("formula_detalle"))),
+          bslib::card(
+            bslib::card_header(
               class = "d-flex justify-content-between align-items-center",
-              tagList(bs_icon("code-slash"), " Código R reproducible"),
+              tagList(bsicons::bs_icon("code-slash"), " Código R reproducible"),
               downloadButton(ns("descargar_script"), label = "Descargar .R",
-                             icon = bs_icon("download"), class = "btn-sm btn-outline-primary")
+                             icon = bsicons::bs_icon("download"), class = "btn-sm btn-outline-primary")
             ),
             p("Este script reproduce el cálculo con los parámetros actuales.",
               class = "text-muted small px-3 pt-2 mb-1"),
@@ -1190,7 +1190,7 @@ mod_muestreo_server <- function(id) {
         }
 
         div(
-          layout_columns(
+          bslib::layout_columns(
             col_widths = c(4, 4, 4),
             value_box(title = "n por grupo", value = format(r$n1, big.mark = ","),
                       showcase = bsicons::bs_icon("people-fill"), theme = "primary"),
@@ -1201,19 +1201,19 @@ mod_muestreo_server <- function(id) {
                       showcase = bsicons::bs_icon("lightning-charge-fill"), theme = "secondary")
           ),
           p(class = "text-muted small text-center mt-1 mb-3", params_txt),
-          card(
-            card_header("Curva de potencia"),
+          bslib::card(
+            bslib::card_header("Curva de potencia"),
             p(class = "text-muted small px-3 pt-2",
               "Muestra c\u00f3mo crece la potencia al aumentar el n por grupo."),
             plotOutput(ns("plot_potencia"), height = "260px")
           ),
-          card(card_header("F\u00f3rmula"), div(class = "px-3 py-2", formula_ui)),
-          card(
-            card_header(
+          bslib::card(bslib::card_header("F\u00f3rmula"), div(class = "px-3 py-2", formula_ui)),
+          bslib::card(
+            bslib::card_header(
               class = "d-flex justify-content-between align-items-center",
-              tagList(bs_icon("code-slash"), " C\u00f3digo R reproducible"),
+              tagList(bsicons::bs_icon("code-slash"), " C\u00f3digo R reproducible"),
               downloadButton(ns("descargar_comp"), label = "Descargar .R",
-                             icon = bs_icon("download"), class = "btn-sm btn-outline-primary")
+                             icon = bsicons::bs_icon("download"), class = "btn-sm btn-outline-primary")
             ),
             p("Script reproducible con los par\u00e1metros actuales.",
               class = "text-muted small px-3 pt-2 mb-1"),
@@ -1613,7 +1613,7 @@ mod_muestreo_server <- function(id) {
         return(
           div(
             class = "alert alert-info d-flex align-items-center gap-2",
-            bs_icon("info-circle-fill"),
+            bsicons::bs_icon("info-circle-fill"),
             span("Configurá los parámetros y presioná ",
                  strong("Tomar muestra"), " para ver los resultados.")
           )
@@ -1637,7 +1637,7 @@ mod_muestreo_server <- function(id) {
       fpc_info <- if (frac_pct < 5) {
         list(
           clase = "alert-success",
-          icono = bs_icon("check-circle-fill"),
+          icono = bsicons::bs_icon("check-circle-fill"),
           texto = sprintf(
             "Fracción de muestreo: %.1f%% (n/N = %d/%d). La corrección por población finita tiene efecto mínimo (FPC = %.4f, reducción del EE: %.1f%%). Con fracciones menores al 5%%, el EE sin corrección (%.3f cm) y con corrección (%.3f cm) son prácticamente iguales.",
             frac_pct, n, N, fpc, dif_pct, ee, ee_c
@@ -1646,7 +1646,7 @@ mod_muestreo_server <- function(id) {
       } else if (frac_pct < 20) {
         list(
           clase = "alert-warning",
-          icono = bs_icon("exclamation-triangle-fill"),
+          icono = bsicons::bs_icon("exclamation-triangle-fill"),
           texto = sprintf(
             "Fracción de muestreo: %.1f%% (n/N = %d/%d). La corrección por población finita tiene efecto apreciable (FPC = %.4f, reducción del EE: %.1f%%). El EE sin corrección sería %.3f cm; con la corrección es %.3f cm. Se recomienda aplicarla cuando la fracción supera el 5%%.",
             frac_pct, n, N, fpc, dif_pct, ee, ee_c
@@ -1655,7 +1655,7 @@ mod_muestreo_server <- function(id) {
       } else {
         list(
           clase = "alert-danger",
-          icono = bs_icon("exclamation-octagon-fill"),
+          icono = bsicons::bs_icon("exclamation-octagon-fill"),
           texto = sprintf(
             "Fracción de muestreo alta: %.1f%% (n/N = %d/%d). La corrección reduce sustancialmente el EE (FPC = %.4f, reducción: %.1f%%). EE sin corrección: %.3f cm → con corrección: %.3f cm. Con fracciones tan altas, conviene evaluar si es factible censar toda la población.",
             frac_pct, n, N, fpc, dif_pct, ee, ee_c
@@ -1664,30 +1664,30 @@ mod_muestreo_server <- function(id) {
       }
 
       tagList(
-        layout_columns(
+        bslib::layout_columns(
           col_widths = c(3, 3, 3, 3),
           value_box(
             title    = "Media muestral (\u0078\u0305)",
             value    = paste0(round(x_bar, 2), " cm"),
-            showcase = bs_icon("rulers"),
+            showcase = bsicons::bs_icon("rulers"),
             theme    = "primary"
           ),
           value_box(
             title    = "Desvío estándar (s)",
             value    = paste0(round(s, 2), " cm"),
-            showcase = bs_icon("distribute-vertical"),
+            showcase = bsicons::bs_icon("distribute-vertical"),
             theme    = value_box_theme(bg = colores$secundario)
           ),
           value_box(
             title    = "Error estándar (EE)",
             value    = paste0(round(ee_c, 3), " cm"),
-            showcase = bs_icon("bullseye"),
+            showcase = bsicons::bs_icon("bullseye"),
             theme    = value_box_theme(bg = colores$acento)
           ),
           value_box(
             title    = "IC 95%",
             value    = paste0("[", round(ic_lo, 1), " \u2013 ", round(ic_hi, 1), "]"),
-            showcase = bs_icon("arrows-expand"),
+            showcase = bsicons::bs_icon("arrows-expand"),
             theme    = value_box_theme(bg = "#5FA2CE")
           )
         ),
@@ -1800,10 +1800,10 @@ mod_muestreo_server <- function(id) {
       item   <- todos[[which(claves == input$esquema_sel)]]
 
       div(
-        layout_columns(
+        bslib::layout_columns(
           col_widths = c(6, 6),
-          card(
-            card_header("Descripción"),
+          bslib::card(
+            bslib::card_header("Descripción"),
             p(item$desc, class = "text-muted small"),
             tags$dl(
               class = "row small mb-0",
@@ -1815,8 +1815,8 @@ mod_muestreo_server <- function(id) {
               tags$dd(class = "col-sm-8", item$limitacion)
             )
           ),
-          card(
-            card_header("Ejemplo"),
+          bslib::card(
+            bslib::card_header("Ejemplo"),
             div(
               class = "wiz-result",
               p(item$ejemplo, class = "mb-0 fst-italic small")

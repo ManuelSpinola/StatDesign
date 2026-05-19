@@ -17,23 +17,23 @@ mod_acerca_de_ui <- function(id) {
   ns <- NS(id)
   tagList(
 
-    layout_columns(
+    bslib::layout_columns(
       col_widths = c(12),
       gap        = "1rem",
 
       # ── Desarrollado con R ────────────────────────────────
-      card(
-        card_header(
-          bs_icon("code-slash"), " Desarrollado con R"
+      bslib::card(
+        bslib::card_header(
+          bsicons::bs_icon("code-slash"), " Desarrollado con R"
         ),
-        card_body(
+        bslib::card_body(
           p("StatDesign fue desarrollada con R y los siguientes paquetes de código abierto."),
 
           # Entorno R
           p(class = "text-muted small fw-bold mt-3 mb-1", "ENTORNO DE DESARROLLO"),
           div(
             style = "display: flex; align-items: center; gap: 12px; background: var(--bs-secondary-bg); border-radius: 8px; padding: 10px 14px;",
-            bs_icon("r-circle", size = "1.2em"),
+            bsicons::bs_icon("r-circle", size = "1.2em"),
             tags$strong("R Project for Statistical Computing"),
             tags$span(
               style = "color: gray; font-size: 0.85em;",
@@ -91,11 +91,11 @@ mod_acerca_de_ui <- function(id) {
       ),
 
       # ── Citas ─────────────────────────────────────────────
-      card(
-        card_header(
-          bs_icon("journal-text"), " Citas"
+      bslib::card(
+        bslib::card_header(
+          bsicons::bs_icon("journal-text"), " Citas"
         ),
-        card_body(
+        bslib::card_body(
           p("Si utilizás StatDesign en tu investigación, por favor citá R y esta aplicación."),
 
           p(class = "text-muted small fw-bold mt-3 mb-1", "CÓMO CITAR R"),

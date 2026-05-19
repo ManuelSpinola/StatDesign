@@ -10,12 +10,12 @@ mod_ayuda_ui <- function(id) {
     div(
       class = "p-3",
 
-      layout_columns(
+      bslib::layout_columns(
         col_widths = c(6, 6),
 
         # ── Cómo usar StatDesign ──────────────────────
-        card(
-          card_header("¿Cómo usar StatDesign?"),
+        bslib::card(
+          bslib::card_header("¿Cómo usar StatDesign?"),
           tags$ol(
             tags$li(strong("Tipos de estudio:"),
                     " Explora las tres categorías principales — descriptivo,
@@ -33,8 +33,8 @@ mod_ayuda_ui <- function(id) {
         ),
 
         # ── StatSuite ───────────────────────────────
-        card(
-          card_header("StatSuite"),
+        bslib::card(
+          bslib::card_header("StatSuite"),
           p("StatDesign forma parte de ",
             tags$a("StatSuite", href = "https://statsuite.netlify.app", target = "_blank"),
             ", una colección de aplicaciones estadísticas para el análisis y visualización de datos."),
@@ -44,8 +44,8 @@ mod_ayuda_ui <- function(id) {
         ),
 
         # ── Conceptos clave ───────────────────────────
-        card(
-          card_header("Conceptos clave"),
+        bslib::card(
+          bslib::card_header("Conceptos clave"),
           tags$dl(
             tags$dt("Variable independiente"),
             tags$dd("Variable que el investigador manipula o que se considera
@@ -66,8 +66,8 @@ mod_ayuda_ui <- function(id) {
         ),
 
         # ── Referencias ───────────────────────────────
-        card(
-          card_header("Referencias"),
+        bslib::card(
+          bslib::card_header("Referencias"),
           tags$ul(
             tags$li("Quinn, G. P. & Keough, M. J. (2002).",
                     em("Experimental Design and Data Analysis for Biologists."),

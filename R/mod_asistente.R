@@ -146,8 +146,8 @@ mod_asistente_server <- function(id) {
               )
             )
           ),
-          card(
-            card_header("Ejemplo"),
+          bslib::card(
+            bslib::card_header("Ejemplo"),
             p(class = "fst-italic text-muted mb-0", t$ejemplo)
           )
         )

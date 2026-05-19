@@ -15,18 +15,18 @@ mod_fundamentos_ui <- function(id) {
 
   tagList(
 
-    navset_card_tab(
+    bslib::navset_card_tab(
 
       # ── Tab 1: Aleatorización ──────────────────────────
-      nav_panel(
-        title = tagList(bs_icon("shuffle"), " Aleatorización"),
-        card_body(
-          layout_columns(
+      bslib::nav_panel(
+        title = tagList(bsicons::bs_icon("shuffle"), " Aleatorización"),
+        bslib::card_body(
+          bslib::layout_columns(
             col_widths = c(12),
 
-            card(
-              card_header(bs_icon("shuffle"), " ¿Qué es la aleatorización?"),
-              card_body(
+            bslib::card(
+              bslib::card_header(bsicons::bs_icon("shuffle"), " ¿Qué es la aleatorización?"),
+              bslib::card_body(
                 p("La aleatorización es el proceso de asignar las unidades
                   experimentales a los tratamientos —o de seleccionar las unidades
                   de muestreo de una población— mediante un mecanismo de azar."),
@@ -44,12 +44,12 @@ mod_fundamentos_ui <- function(id) {
               )
             ),
 
-            layout_columns(
+            bslib::layout_columns(
               col_widths = c(6, 6),
 
-              card(
-                card_header(bs_icon("diagram-3"), " Dos tipos de aleatorización"),
-                card_body(
+              bslib::card(
+                bslib::card_header(bsicons::bs_icon("diagram-3"), " Dos tipos de aleatorización"),
+                bslib::card_body(
                   tags$dl(
                     class = "small mb-0",
                     tags$dt("1. Selección aleatoria"),
@@ -66,9 +66,9 @@ mod_fundamentos_ui <- function(id) {
                 )
               ),
 
-              card(
-                card_header(bs_icon("journal-text"), " Ejemplo"),
-                card_body(
+              bslib::card(
+                bslib::card_header(bsicons::bs_icon("journal-text"), " Ejemplo"),
+                bslib::card_body(
                   div(
                     class = "wiz-result",
                     p(class = "small fst-italic mb-2",
@@ -88,15 +88,15 @@ mod_fundamentos_ui <- function(id) {
       ),
 
       # ── Tab 2: Replicación ─────────────────────────────
-      nav_panel(
-        title = tagList(bs_icon("copy"), " Replicación"),
-        card_body(
-          layout_columns(
+      bslib::nav_panel(
+        title = tagList(bsicons::bs_icon("copy"), " Replicación"),
+        bslib::card_body(
+          bslib::layout_columns(
             col_widths = c(12),
 
-            card(
-              card_header(bs_icon("layers"), " ¿Qué es la replicación?"),
-              card_body(
+            bslib::card(
+              bslib::card_header(bsicons::bs_icon("layers"), " ¿Qué es la replicación?"),
+              bslib::card_body(
                 p("La replicación es la asignación del mismo tratamiento —
                   o la aplicación del mismo protocolo de muestreo — a más de
                   una unidad experimental o de muestreo independiente."),
@@ -123,12 +123,12 @@ mod_fundamentos_ui <- function(id) {
               )
             ),
 
-            layout_columns(
+            bslib::layout_columns(
               col_widths = c(6, 6),
 
-              card(
-                card_header(bs_icon("check-circle"), " ¿Para qué sirve?"),
-                card_body(
+              bslib::card(
+                bslib::card_header(bsicons::bs_icon("check-circle"), " ¿Para qué sirve?"),
+                bslib::card_body(
                   tags$ul(
                     class = "small",
                     tags$li("Permite estimar la variación natural del sistema."),
@@ -140,9 +140,9 @@ mod_fundamentos_ui <- function(id) {
                 )
               ),
 
-              card(
-                card_header(bs_icon("journal-text"), " Ejemplo"),
-                card_body(
+              bslib::card(
+                bslib::card_header(bsicons::bs_icon("journal-text"), " Ejemplo"),
+                bslib::card_body(
                   div(
                     class = "wiz-result",
                     p(class = "small fst-italic mb-2",
@@ -162,15 +162,15 @@ mod_fundamentos_ui <- function(id) {
       ),
 
       # ── Tab 3: Control ─────────────────────────────────
-      nav_panel(
-        title = tagList(bs_icon("sliders"), " Control"),
-        card_body(
-          layout_columns(
+      bslib::nav_panel(
+        title = tagList(bsicons::bs_icon("sliders"), " Control"),
+        bslib::card_body(
+          bslib::layout_columns(
             col_widths = c(12),
 
-            card(
-              card_header(bs_icon("sliders"), " ¿Qué es el control experimental?"),
-              card_body(
+            bslib::card(
+              bslib::card_header(bsicons::bs_icon("sliders"), " ¿Qué es el control experimental?"),
+              bslib::card_body(
                 p("En experimentación, los ", strong("controles"), " son
                   observaciones paralelas usadas para verificar los efectos de
                   los tratamientos experimentales. Son unidades que no reciben
@@ -191,12 +191,12 @@ mod_fundamentos_ui <- function(id) {
               )
             ),
 
-            layout_columns(
+            bslib::layout_columns(
               col_widths = c(6, 6),
 
-              card(
-                card_header(bs_icon("check-circle"), " ¿Para qué sirve?"),
-                card_body(
+              bslib::card(
+                bslib::card_header(bsicons::bs_icon("check-circle"), " ¿Para qué sirve?"),
+                bslib::card_body(
                   tags$ul(
                     class = "small",
                     tags$li("Elimina el efecto de factores ajenos al tratamiento."),
@@ -207,9 +207,9 @@ mod_fundamentos_ui <- function(id) {
                 )
               ),
 
-              card(
-                card_header(bs_icon("journal-text"), " Ejemplo"),
-                card_body(
+              bslib::card(
+                bslib::card_header(bsicons::bs_icon("journal-text"), " Ejemplo"),
+                bslib::card_body(
                   div(
                     class = "wiz-result",
                     p(class = "small fst-italic mb-2",
@@ -230,15 +230,15 @@ mod_fundamentos_ui <- function(id) {
       ),
 
       # ── Tab 4: Pseudoreplicación ───────────────────────
-      nav_panel(
-        title = tagList(bs_icon("exclamation-triangle"), " Pseudoreplicación"),
-        card_body(
-          layout_columns(
+      bslib::nav_panel(
+        title = tagList(bsicons::bs_icon("exclamation-triangle"), " Pseudoreplicación"),
+        bslib::card_body(
+          bslib::layout_columns(
             col_widths = c(12),
 
-            card(
-              card_header(bs_icon("exclamation-triangle"), " ¿Qué es la pseudoreplicación?"),
-              card_body(
+            bslib::card(
+              bslib::card_header(bsicons::bs_icon("exclamation-triangle"), " ¿Qué es la pseudoreplicación?"),
+              bslib::card_body(
                 div(
                   class = "wiz-result mb-3",
                   p(class = "small mb-0",
@@ -260,15 +260,15 @@ mod_fundamentos_ui <- function(id) {
             ),
 
             # Tres tipos
-            layout_columns(
+            bslib::layout_columns(
               col_widths = c(4, 4, 4),
 
-              card(
-                card_header(
+              bslib::card(
+                bslib::card_header(
                   class = "bg-light",
-                  bs_icon("geo-alt"), " Simple"
+                  bsicons::bs_icon("geo-alt"), " Simple"
                 ),
-                card_body(
+                bslib::card_body(
                   p(class = "small",
                     "Ocurre cuando se toman múltiples submuestras de una sola
                      unidad experimental y se analizan como réplicas independientes.
@@ -289,12 +289,12 @@ mod_fundamentos_ui <- function(id) {
                 )
               ),
 
-              card(
-                card_header(
+              bslib::card(
+                bslib::card_header(
                   class = "bg-light",
-                  bs_icon("archive"), " De sacrificio"
+                  bsicons::bs_icon("archive"), " De sacrificio"
                 ),
-                card_body(
+                bslib::card_body(
                   p(class = "small",
                     "Existen réplicas verdaderas pero los datos se colapsan antes
                      del análisis, o las submuestras dentro de cada réplica se
@@ -316,12 +316,12 @@ mod_fundamentos_ui <- function(id) {
                 )
               ),
 
-              card(
-                card_header(
+              bslib::card(
+                bslib::card_header(
                   class = "bg-light",
-                  bs_icon("clock-history"), " Temporal"
+                  bsicons::bs_icon("clock-history"), " Temporal"
                 ),
-                card_body(
+                bslib::card_body(
                   p(class = "small",
                     "Se toman medidas repetidas en el tiempo sobre las mismas
                      unidades y se tratan como observaciones independientes.
@@ -341,10 +341,10 @@ mod_fundamentos_ui <- function(id) {
               )
             ),
 
-            card(
-              card_header(bs_icon("lightbulb"), " ¿Cómo evitarla?"),
-              card_body(
-                layout_columns(
+            bslib::card(
+              bslib::card_header(bsicons::bs_icon("lightbulb"), " ¿Cómo evitarla?"),
+              bslib::card_body(
+                bslib::layout_columns(
                   col_widths = c(6, 6),
                   div(
                     tags$ol(
@@ -370,7 +370,7 @@ mod_fundamentos_ui <- function(id) {
                   div(
                     class = "wiz-result",
                     p(class = "small mb-1",
-                      bs_icon("exclamation-circle"), " ",
+                      bsicons::bs_icon("exclamation-circle"), " ",
                       strong("Regla práctica:")),
                     p(class = "small mb-0",
                       "Siempre preguntarse: ¿a qué nivel se asignó el tratamiento?

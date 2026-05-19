@@ -16,23 +16,23 @@ tab_contenido <- function(t) {
     ),
 
     # Características + Limitaciones
-    layout_columns(
+    bslib::layout_columns(
       col_widths = c(6, 6),
       fill       = FALSE,
 
-      card(
+      bslib::card(
         full_screen = FALSE,
         height      = NULL,
-        card_header("Características"),
+        bslib::card_header("Características"),
         tags$ul(
           lapply(t$caracteristicas, tags$li)
         )
       ),
 
-      card(
+      bslib::card(
         full_screen = FALSE,
         height      = NULL,
-        card_header("Limitaciones"),
+        bslib::card_header("Limitaciones"),
         tags$ul(
           lapply(t$limitaciones, tags$li)
         )
@@ -40,18 +40,18 @@ tab_contenido <- function(t) {
     ),
 
     # ¿Cuándo usar?
-    card(
+    bslib::card(
       fill        = FALSE,
       full_screen = FALSE,
-      card_header("¿Cuándo usar?"),
+      bslib::card_header("¿Cuándo usar?"),
       p(t$cuando, class = "mb-0")
     ),
 
     # Aplicaciones frecuentes
-    card(
+    bslib::card(
       fill        = FALSE,
       full_screen = FALSE,
-      card_header("Aplicaciones frecuentes en ciencias ambientales y recursos naturales"),
+      bslib::card_header("Aplicaciones frecuentes en ciencias ambientales y recursos naturales"),
       div(
         lapply(seq_along(t$diseños), function(i) {
           div(
@@ -64,18 +64,18 @@ tab_contenido <- function(t) {
     ),
 
     # Estadísticos típicos
-    card(
+    bslib::card(
       fill        = FALSE,
       full_screen = FALSE,
-      card_header("Estadísticos típicos"),
+      bslib::card_header("Estadísticos típicos"),
       p(t$estadisticas, class = "mb-0")
     ),
 
     # Ejemplo
-    card(
+    bslib::card(
       fill        = FALSE,
       full_screen = FALSE,
-      card_header("Ejemplo ambiental"),
+      bslib::card_header("Ejemplo ambiental"),
       div(
         class = "wiz-result",
         p(t$ejemplo, class = "mb-0 fst-italic")
@@ -89,24 +89,24 @@ mod_tipos_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
-    navset_card_tab(
+    bslib::navset_card_tab(
       id = ns("tabs_tipos"),
 
-      nav_panel(
+      bslib::nav_panel(
         title    = tagList(bsicons::bs_icon("clipboard-data"), " Descriptivo"),
         value    = "descriptivo",
         fillable = FALSE,
         tab_contenido(tipos_estudio$descriptivo)
       ),
 
-      nav_panel(
+      bslib::nav_panel(
         title    = tagList(bsicons::bs_icon("diagram-2"), " Observacional / Correlacional"),
         value    = "observacional",
         fillable = FALSE,
         tab_contenido(tipos_estudio$observacional)
       ),
 
-      nav_panel(
+      bslib::nav_panel(
         title    = tagList(bsicons::bs_icon("eyedropper"), " Experimental"),
         value    = "experimental",
         fillable = FALSE,
