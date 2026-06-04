@@ -6,7 +6,6 @@
 
 library(shiny)
 library(bslib)
-library(tidyverse)
 library(DT)
 
 # ── Paleta de colores (idéntica a StatFlow) ────────────────
