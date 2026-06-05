@@ -11,8 +11,6 @@
 #   StatModels  — Modelos avanzados (próximamente)
 # ============================================================
 
-library(bsicons)
-
 mod_acerca_de_ui <- function(id) {
   ns <- NS(id)
   tagList(
@@ -76,9 +74,9 @@ mod_acerca_de_ui <- function(id) {
                 tags$td(tags$a("github.com/rstudio/bsicons", href = "https://github.com/rstudio/bsicons", target = "_blank"))
               ),
               tags$tr(
-                tags$td(tags$code("tidyverse")),
-                tags$td(paste0("v", packageVersion("tidyverse"))),
-                tags$td(tags$a("tidyverse.org", href = "https://www.tidyverse.org", target = "_blank"))
+                tags$td(tags$code("dplyr")),
+                tags$td(paste0("v", packageVersion("dplyr"))),
+                tags$td(tags$a("dplyr.tidyverse.org", href = "https://dplyr.tidyverse.org", target = "_blank"))
               ),
               tags$tr(
                 tags$td(tags$code("DT")),

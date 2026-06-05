@@ -958,10 +958,12 @@ mod_muestreo_server <- function(id) {
         actionButton(
           ns(id), label,
           class = paste("wiz-opt w-100 text-start mb-1",
-                        if (es_sel) "border border-primary" else ""),
+                        if (es_sel) "" else "btn-outline-secondary"),
           style = if (es_sel)
-            paste0("border-color:", colores$primario, " !important;",
-                   "background:", colores$fondo, ";")
+            paste0("background:", colores$primario, " !important;",
+                   "border-color:", colores$primario, " !important;",
+                   "color: #ffffff !important;",
+                   "font-weight: 600;")
           else ""
         )
       }
