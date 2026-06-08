@@ -247,7 +247,7 @@
       "RemoteUsername": "ManuelSpinola",
       "RemotePkgRef": "ManuelSpinola/StatDesign",
       "RemoteRef": "HEAD",
-      "RemoteSha": "4e6aad764ec8959fd638f8bf2d777f2ede7eb175",
+      "RemoteSha": "e601098a8cd7559986d78ee1e3dc785e9a5e0732",
       "NeedsCompilation": "no",
       "Author": "Manuel Spínola [aut, cre]",
       "Maintainer": "Manuel Spínola <manuel.spinola@una.ac.cr>",
