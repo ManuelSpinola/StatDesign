@@ -2917,7 +2917,7 @@
     "app.R": {
       "checksum": "e679504df79673fe997b6d37dfd59e4b"
     },
-    "DESCRIPTION.bak": {
+    "DESCRIPTION": {
       "checksum": "56ed37c2a7638c42486b4d05cc29212d"
     },
     "dev/run_dev.R": {
