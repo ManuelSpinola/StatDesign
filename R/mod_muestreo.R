@@ -24,69 +24,87 @@ esquema_ggplot <- function(tipo, colores) {
     )
 
   if (tipo == "alea_simple") {
-    pts <- data.frame(x = runif(20, 0.5, 9.5), y = runif(20, 0.5, 9.5))
-    base +
+    celdas <- construir_grilla(8, 8)
+    sel    <- sample(64, 16)
+    pts <- do.call(rbind, lapply(sel, function(qid) {
+      cx <- celdas$x0[celdas$qid == qid]
+      cy <- celdas$y0[celdas$qid == qid]
+      data.frame(x = cx + runif(2, 0.15, 1.1), y = cy + runif(2, 0.15, 1.1))
+    }))
+    p <- agregar_celdas_grilla(base, celdas, sel, colores)
+    p +
       geom_point(data = pts, aes(x, y),
-                 color = colores$primario, size = 3.5, alpha = 0.85) +
-      labs(title = "Aleatorio simple — 20 unidades seleccionadas al azar")
+                 color = colores$primario, size = 3, alpha = 0.9) +
+      labs(title = "Aleatorio simple — 16 de 64 cuadrantes seleccionados al azar")
 
   } else if (tipo == "alea_estrat") {
-    pts <- data.frame(
-      x       = c(runif(7, 0.3, 3.3), runif(7, 3.7, 6.7), runif(7, 7.0, 9.7)),
-      y       = runif(21, 0.5, 9.5),
-      estrato = rep(c("Estrato A", "Estrato B", "Estrato C"), each = 7)
+    celdas <- construir_grilla(8, 8)
+    zonas <- list(
+      list(nombre = "A", cols = 1:3, color = colores$primario),
+      list(nombre = "B", cols = 4:5, color = colores$acento),
+      list(nombre = "C", cols = 6:8, color = colores$secundario)
     )
-    base +
-      annotate("rect", xmin = 0,   xmax = 3.5, ymin = 0, ymax = 10,
-               fill = colores$primario,   alpha = 0.08) +
-      annotate("rect", xmin = 3.5, xmax = 6.8, ymin = 0, ymax = 10,
-               fill = colores$acento,     alpha = 0.08) +
-      annotate("rect", xmin = 6.8, xmax = 10,  ymin = 0, ymax = 10,
-               fill = colores$secundario, alpha = 0.08) +
-      geom_vline(xintercept = c(3.5, 6.8), linetype = "dashed",
-                 color = colores$borde, linewidth = 0.7) +
-      geom_point(data = pts, aes(x, y, color = estrato), size = 3.5, alpha = 0.9) +
-      scale_color_manual(values = c(colores$primario, colores$acento, colores$secundario)) +
-      annotate("text", x = c(1.75, 5.15, 8.4), y = 9.5,
-               label = c("A", "B", "C"), size = 4, fontface = "bold",
-               color = colores$texto) +
-      labs(title = "Aleatorio estratificado — 3 estratos, 7 unidades c/u")
+    sel_por_zona <- lapply(zonas, function(z) {
+      ids <- celdas$qid[celdas$qx %in% z$cols]
+      sample(ids, 2)
+    })
+    sel <- unlist(sel_por_zona)
+
+    p <- base
+    for (z in zonas) {
+      xmin <- (min(z$cols) - 1) * 1.25
+      xmax <- max(z$cols) * 1.25
+      p <- p +
+        annotate("rect", xmin = xmin, xmax = xmax, ymin = 0, ymax = 10,
+                 fill = z$color, alpha = 0.07) +
+        annotate("text", x = (xmin + xmax) / 2, y = 9.7, label = z$nombre,
+                 size = 4, fontface = "bold", color = z$color)
+    }
+    p <- agregar_celdas_grilla(p, celdas, sel, colores)
+
+    pts <- do.call(rbind, lapply(sel_por_zona, function(ids) {
+      do.call(rbind, lapply(ids, function(qid) {
+        cx <- celdas$x0[celdas$qid == qid]
+        cy <- celdas$y0[celdas$qid == qid]
+        data.frame(x = cx + runif(2, 0.15, 1.1), y = cy + runif(2, 0.15, 1.1))
+      }))
+    }))
+
+    p +
+      geom_point(data = pts, aes(x, y),
+                 color = colores$primario, size = 3, alpha = 0.9) +
+      labs(title = "Aleatorio estratificado — 2 cuadrantes seleccionados por estrato")
 
   } else if (tipo == "sistematico") {
-    xs  <- seq(1.2, 9.2, by = 2)
-    ys  <- seq(1.2, 9.2, by = 2)
-    pts <- expand.grid(x = xs, y = ys)
-    base +
-      geom_hline(yintercept = ys, linetype = "dotted",
-                 color = colores$borde, linewidth = 0.4) +
-      geom_vline(xintercept = xs, linetype = "dotted",
-                 color = colores$borde, linewidth = 0.4) +
+    celdas <- construir_grilla(8, 8)
+    sel <- celdas$qid[celdas$qx %in% c(2, 4, 6, 8) & celdas$qy %in% c(1, 3, 5, 7)]
+    pts <- do.call(rbind, lapply(sel, function(qid) {
+      cx <- celdas$x0[celdas$qid == qid]
+      cy <- celdas$y0[celdas$qid == qid]
+      data.frame(x = cx + runif(2, 0.15, 1.1), y = cy + runif(2, 0.15, 1.1))
+    }))
+    p <- agregar_celdas_grilla(base, celdas, sel, colores)
+    p +
       geom_point(data = pts, aes(x, y),
-                 color = colores$primario, size = 3.5, shape = 15, alpha = 0.85) +
-      labs(title = "Sistemático — grilla regular con inicio aleatorio")
+                 color = colores$primario, size = 3, alpha = 0.9) +
+      labs(title = "Sistemático — cuadrantes en patrón regular con inicio aleatorio")
 
   } else if (tipo == "conglomerados") {
-    centros <- data.frame(cx = c(2, 6, 8), cy = c(7, 3, 7.5))
-    pts <- do.call(rbind, lapply(1:3, function(i) {
-      data.frame(
-        x    = centros$cx[i] + rnorm(6, 0, 0.6),
-        y    = centros$cy[i] + rnorm(6, 0, 0.6),
-        cong = paste("Conglomerado", i)
-      )
+    celdas <- construir_grilla(4, 4)
+    sel <- sample(16, 4)
+    pts <- do.call(rbind, lapply(seq_along(sel), function(i) {
+      qid <- sel[i]
+      cx  <- celdas$x0[celdas$qid == qid]
+      cy  <- celdas$y0[celdas$qid == qid]
+      n   <- sample(5:8, 1)
+      data.frame(x = cx + runif(n, 0.2, 2.3), y = cy + runif(n, 0.2, 2.3),
+                 cong = paste("Conglomerado", i))
     }))
-    no_sel <- data.frame(
-      x = c(4.5, 4.5, 4.8, 1.5, 1.8, 1.2),
-      y = c(1.5, 1.8, 1.2, 3.5, 3.2, 3.8)
-    )
-    base +
-      geom_point(data = no_sel, aes(x, y),
-                 color = "#A3ACB9", size = 2.5, alpha = 0.5) +
-      geom_point(data = pts, aes(x, y, color = cong), size = 3.5, alpha = 0.9) +
-      scale_color_manual(values = c(colores$primario, colores$acento, colores$secundario)) +
-      annotate("text", x = centros$cx, y = centros$cy + 1.2,
-               label = paste("C", 1:3), size = 3.5,
-               color = colores$texto, fontface = "bold") +
-      labs(title = "Por conglomerados — grupos seleccionados vs. no seleccionados (gris)")
+    p <- agregar_celdas_grilla(base, celdas, sel, colores)
+    p +
+      geom_point(data = pts, aes(x, y, color = cong), size = 3, alpha = 0.9) +
+      scale_color_tableau_cb() +
+      labs(title = "Por conglomerados — 4 de 16 bloques seleccionados, todo medido dentro")
 
   } else if (tipo == "conveniencia") {
     pts_acc <- data.frame(x = runif(15, 0.5, 4), y = runif(15, 0.5, 4))
@@ -119,7 +137,7 @@ esquema_ggplot <- function(tipo, colores) {
   } else if (tipo == "transectos") {
     trans <- data.frame(x1 = c(1,1,1), x2 = c(9,9,9), y = c(2,5,8))
     pts   <- do.call(rbind, lapply(c(2,5,8), function(yt) {
-      data.frame(x = seq(1.5, 8.5, by = 1.5), y = yt + rnorm(6, 0, 0.15))
+      data.frame(x = seq(1.5, 8.5, length.out = 6), y = yt + rnorm(6, 0, 0.15))
     }))
     base +
       geom_segment(data = trans, aes(x = x1, xend = x2, y = y, yend = y),
@@ -175,6 +193,82 @@ esquema_ggplot <- function(tipo, colores) {
                color = colores$secundario, hjust = 1) +
       labs(title = "Muestreo adaptativo — intensificación en zonas de detección")
   }
+}
+# ── Helpers: ejercicios interactivos — muestreo por cuadrantes ──
+# La grilla es la unidad de muestreo real (no solo un dibujo de fondo): el
+# área de estudio se divide en cuadrantes fijos; los árboles se dispersan de
+# forma natural dentro de ella (no en filas), y lo que se selecciona en cada
+# diseño son cuadrantes completos — se mide cada árbol dentro de ellos.
+# `ancho`/`alto` permiten áreas rectangulares (no solo cuadradas) para que
+# cada diseño pueda usar el espacio horizontal disponible sin deformar el
+# tamaño de los cuadrantes (que siempre se calculan como celdas cuadradas).
+
+generar_poblacion_natural <- function(N, media, sd, seed, xr = c(0, 10), yr = c(0, 10)) {
+  set.seed(seed)
+  data.frame(
+    id = seq_len(N),
+    dap = pmax(round(rnorm(N, mean = media, sd = sd), 1), 1),
+    x = runif(N, xr[1] + 0.1, xr[2] - 0.1),
+    y = runif(N, yr[1] + 0.1, yr[2] - 0.1),
+    color_base = colores$secundario,
+    seleccionado = FALSE,
+    stringsAsFactors = FALSE
+  )
+}
+
+construir_grilla <- function(ncol, nrow, ancho = 10, alto = 10) {
+  cw <- ancho / ncol
+  ch <- alto / nrow
+  celdas <- expand.grid(qx = seq_len(ncol), qy = seq_len(nrow))
+  celdas$qid <- (celdas$qy - 1) * ncol + celdas$qx
+  celdas$x0  <- (celdas$qx - 1) * cw
+  celdas$x1  <- celdas$qx * cw
+  celdas$y0  <- (celdas$qy - 1) * ch
+  celdas$y1  <- celdas$qy * ch
+  celdas
+}
+
+asignar_cuadrante <- function(x, y, ncol, nrow, ancho = 10, alto = 10) {
+  cw <- ancho / ncol
+  ch <- alto / nrow
+  qx <- pmin(ncol, pmax(1, ceiling(x / cw)))
+  qy <- pmin(nrow, pmax(1, ceiling(y / ch)))
+  (qy - 1) * ncol + qx
+}
+
+agregar_celdas_grilla <- function(p, celdas, sel_ids, colores) {
+  p <- p + geom_rect(data = celdas, aes(xmin = x0, xmax = x1, ymin = y0, ymax = y1),
+                      fill = NA, color = colores$borde, linewidth = 0.3)
+  if (!is.null(sel_ids) && length(sel_ids) > 0) {
+    sel_celdas <- celdas[celdas$qid %in% sel_ids, ]
+    p <- p + geom_rect(data = sel_celdas,
+                        aes(xmin = x0, xmax = x1, ymin = y0, ymax = y1),
+                        fill = colores$acento, alpha = 0.12,
+                        color = colores$acento, linewidth = 0.9)
+  }
+  p
+}
+
+agregar_puntos_grilla <- function(p, pob, colores, xlim = c(0, 10), ylim = c(0, 10)) {
+  pob$plot_color <- ifelse(pob$seleccionado, colores$acento, pob$color_base)
+  pob$plot_alpha <- ifelse(pob$seleccionado, 1, 0.75)
+  pob$plot_size  <- ifelse(pob$seleccionado, 4, 2.8)
+
+  p <- p + geom_point(data = pob, aes(x = x, y = y),
+                       color = pob$plot_color, alpha = pob$plot_alpha, size = pob$plot_size)
+
+  p +
+    coord_fixed(xlim = xlim, ylim = ylim, clip = "off") +
+    theme_light(base_size = 12) +
+    theme(
+      panel.grid      = element_blank(),
+      axis.text       = element_blank(),
+      axis.title      = element_blank(),
+      axis.ticks      = element_blank(),
+      panel.border    = element_blank(),
+      plot.background = element_rect(fill = "#FFFFFF", color = NA),
+      legend.position = "none"
+    )
 }
 
 # ── UI ────────────────────────────────────────────────────
@@ -775,124 +869,344 @@ mod_muestreo_ui <- function(id) {
         )
       ),
 
-      # ── Pestaña 4: Ejercicio MAS ────────────────────────
+bslib::nav_panel(
+  title = tagList(bsicons::bs_icon("play-circle", class = "me-1"), "Ejercicio"),
+
+  div(
+    class = "p-3",
+
+    p(
+      "Ejercicios interactivos sobre una población simulada de árboles con
+       valores de DAP (diámetro a la altura del pecho, cm), dispersos de forma
+       natural en un área de estudio. En los 4 diseños, la unidad de muestreo
+       es el cuadrante: el área se divide en una grilla fija y lo que se
+       selecciona son cuadrantes completos — se mide cada árbol dentro de
+       ellos, igual que en un inventario forestal real.",
+      class = "text-muted mb-4"
+    ),
+
+    bslib::navset_card_tab(
+      id = ns("ejercicio_tipo"),
+
+      # ── Sub-pestaña: Aleatorio simple (MAS) ──
       bslib::nav_panel(
-        title = tagList(bsicons::bs_icon("play-circle", class = "me-1"), "Ejercicio"),
-
+        title    = "Aleatorio simple",
+        value    = "mas",
+        fillable = FALSE,
         div(
-          class = "p-3",
+          class = "pt-3",
 
-          p(
-            "Ejercicio de muestreo aleatorio simple (MAS) sobre una población simulada
-             de árboles con valores de DAP (diámetro a la altura del pecho, cm).
-             Ajustá los parámetros, tomá una muestra y observá las métricas resultantes.",
-            class = "text-muted mb-4"
-          ),
+          p(class = "text-muted small mb-3",
+            "Muestreo aleatorio simple de cuadrantes: cada uno de los 64
+             cuadrantes de la grilla tiene igual probabilidad de ser
+             seleccionado, sin importar su posición."),
 
           bslib::layout_columns(
             col_widths = c(3, 9),
 
-            # ── Sidebar de controles ──────────────────────
             bslib::card(
+              fill = FALSE, full_screen = FALSE,
               bslib::card_header(
                 tagList(bsicons::bs_icon("sliders", class = "me-1"), "Parámetros del ejercicio")
               ),
               bslib::card_body(
-
-                numericInput(
-                  ns("ej_N"),
-                  label = "Tamaño de la población (N)",
-                  value = 200, min = 50, max = 2000, step = 50
-                ),
-
-                numericInput(
-                  ns("ej_n"),
-                  label = "Tamaño de muestra (n)",
-                  value = 30, min = 5, max = 500, step = 1
-                ),
-
+                numericInput(ns("ej_N"), "Árboles en la población (N)",
+                             value = 130, min = 60, max = 250, step = 10),
+                numericInput(ns("ej_nq"), "Cuadrantes a muestrear (de 64)",
+                             value = 15, min = 1, max = 64, step = 1),
                 hr(),
-
-                numericInput(
-                  ns("ej_media_pob"),
-                  label = "Media DAP población (cm)",
-                  value = 25, min = 5, max = 100, step = 1
-                ),
-
-                numericInput(
-                  ns("ej_sd_pob"),
-                  label = "Desvío estándar población (cm)",
-                  value = 8, min = 1, max = 40, step = 1
-                ),
-
-                numericInput(
-                  ns("ej_seed"),
-                  label = "Semilla aleatoria",
-                  value = 42, min = 1, max = 9999, step = 1
-                ),
-
+                numericInput(ns("ej_media_pob"), "Media DAP población (cm)",
+                             value = 25, min = 5, max = 100, step = 1),
+                numericInput(ns("ej_sd_pob"), "Desvío estándar población (cm)",
+                             value = 8, min = 1, max = 40, step = 1),
+                numericInput(ns("ej_seed"), "Semilla aleatoria",
+                             value = 42, min = 1, max = 9999, step = 1),
                 hr(),
-
-                actionButton(
-                  ns("ej_muestrear"),
-                  label  = "Tomar muestra",
-                  class  = "btn-primary w-100",
-                  icon   = icon("shuffle")
-                ),
-
+                actionButton(ns("ej_muestrear"), label = "Tomar muestra",
+                             class = "btn-primary w-100", icon = icon("shuffle")),
                 br(), br(),
-
-                actionButton(
-                  ns("ej_resetear"),
-                  label = "Reiniciar",
-                  class = "btn-outline-secondary w-100",
-                  icon  = icon("rotate-left")
-                ),
-
+                actionButton(ns("ej_resetear"), label = "Reiniciar",
+                             class = "btn-outline-secondary w-100", icon = icon("rotate-left")),
                 br(), br(),
-
-                div(
-                  class = "small text-muted",
-                  bsicons::bs_icon("info-circle"), " ",
-                  "El DAP se simula con distribución normal truncada (DAP mínimo: 1 cm).
-                   Cada clic en «Tomar muestra» genera una selección aleatoria distinta."
-                )
+                div(class = "small text-muted", bsicons::bs_icon("info-circle"), " ",
+                    "El área se divide en una grilla de 8 × 8 = 64 cuadrantes.
+                     Cada clic en «Tomar muestra» sortea cuadrantes distintos.")
               )
             ),
 
-            # ── Panel de resultados ───────────────────────
             div(
-
-              # Métricas
               uiOutput(ns("ej_metricas")),
-
               br(),
-
-              # Gráfico
               bslib::card(
+                fill = FALSE, full_screen = FALSE,
                 bslib::card_header(
-                  tagList(bsicons::bs_icon("bar-chart", class = "me-1"),
-                          "Distribución de DAP — población y muestra")
+                  tagList(bsicons::bs_icon("map", class = "me-1"), "Cuadrantes y árboles")
                 ),
-                plotOutput(ns("ej_plot"), height = "320px")
+                plotOutput(ns("ej_plot"), height = "400px"),
+                div(class = "px-3 pb-2 small text-muted",
+                    "Cuadrante resaltado = seleccionado en la muestra · todos los árboles dentro se miden.")
               ),
-
               br(),
-
-              # Tabla
               bslib::card(
+                fill = FALSE, full_screen = FALSE,
                 bslib::card_header(
                   tagList(bsicons::bs_icon("table", class = "me-1"),
-                          "Unidades seleccionadas en la muestra")
+                          "Árboles medidos en la muestra")
                 ),
-                bslib::card_body(
-                  uiOutput(ns("ej_tabla_wrap"))
+                bslib::card_body(uiOutput(ns("ej_tabla_wrap")))
+              )
+            )
+          )
+        )
+      ),
+
+      # ── Sub-pestaña: Estratificado ──
+      bslib::nav_panel(
+        title    = "Estratificado",
+        value    = "estrat",
+        fillable = FALSE,
+        div(
+          class = "pt-3",
+
+          p(class = "text-muted small mb-3",
+            "La grilla se divide en 3 estratos (bosque primario, bosque
+             secundario y pastizal), cada uno con su propia cantidad de
+             cuadrantes disponibles. Definí cuántos cuadrantes muestrear en
+             cada estrato y observá cómo se combina la estimación."),
+
+          bslib::layout_columns(
+            col_widths = c(3, 9),
+
+            bslib::card(
+              fill = FALSE, full_screen = FALSE,
+              bslib::card_header(
+                tagList(bsicons::bs_icon("sliders", class = "me-1"), "Parámetros")
+              ),
+              bslib::card_body(
+                numericInput(ns("ej_estrat_seed"), "Semilla aleatoria",
+                             value = 42, min = 1, max = 9999, step = 1),
+                hr(),
+                div(class = "small fw-semibold mb-2",
+                    style = paste0("color:", colores$primario),
+                    "Cuadrantes a muestrear por estrato"),
+                numericInput(ns("ej_estrat_nA"), "Bosque primario — 40 cuadrantes disponibles",
+                             value = 8, min = 1, max = 40, step = 1),
+                numericInput(ns("ej_estrat_nB"), "Bosque secundario — 32 cuadrantes disponibles",
+                             value = 6, min = 1, max = 32, step = 1),
+                numericInput(ns("ej_estrat_nC"), "Pastizal — 40 cuadrantes disponibles",
+                             value = 8, min = 1, max = 40, step = 1),
+                actionButton(ns("ej_estrat_prop"), "Asignación proporcional",
+                             class = "btn-outline-secondary w-100 btn-sm",
+                             icon = icon("balance-scale")),
+                hr(),
+                actionButton(ns("ej_estrat_muestrear"), "Tomar muestra",
+                             class = "btn-primary w-100", icon = icon("shuffle")),
+                br(), br(),
+                actionButton(ns("ej_estrat_resetear"), "Reiniciar",
+                             class = "btn-outline-secondary w-100", icon = icon("rotate-left"))
+              )
+            ),
+
+            div(
+              uiOutput(ns("ej_estrat_metricas")),
+              br(),
+              bslib::card(
+                fill = FALSE, full_screen = FALSE,
+                bslib::card_header(
+                  tagList(bsicons::bs_icon("map", class = "me-1"),
+                          "Cuadrantes por estrato")
+                ),
+                plotOutput(ns("ej_estrat_plot"), height = "400px"),
+                div(class = "px-3 pb-2 small text-muted",
+                    "Cuadrante resaltado = seleccionado en la muestra · todos los árboles dentro se miden.")
+              ),
+              br(),
+              bslib::card(
+                fill = FALSE, full_screen = FALSE,
+                bslib::card_header(
+                  tagList(bsicons::bs_icon("table", class = "me-1"), "Árboles medidos")
+                ),
+                bslib::card_body(uiOutput(ns("ej_estrat_tabla_wrap")))
+              )
+            )
+          )
+        )
+      ),
+
+      # ── Sub-pestaña: Sistemático ──
+      bslib::nav_panel(
+        title    = "Sistemático",
+        value    = "sist",
+        fillable = FALSE,
+        div(
+          class = "pt-3",
+
+          p(class = "text-muted small mb-3",
+            "El diseño sistemático elige cuadrantes a intervalos regulares
+             sobre la misma grilla de 8 × 8, con un punto de inicio aleatorio
+             — así se ubican los transectos en inventarios forestales reales.
+             Activá el patrón periódico para ver qué pasa cuando el espaciado
+             de la grilla coincide con un ciclo real de la población."),
+
+          bslib::layout_columns(
+            col_widths = c(3, 9),
+
+            bslib::card(
+              fill = FALSE, full_screen = FALSE,
+              bslib::card_header(
+                tagList(bsicons::bs_icon("sliders", class = "me-1"), "Parámetros")
+              ),
+              bslib::card_body(
+                numericInput(ns("ej_sist_N"), "Árboles en la población (N)",
+                             value = 130, min = 60, max = 250, step = 10),
+                numericInput(ns("ej_sist_nq"), "Cuadrantes deseados (aprox.)",
+                             value = 12, min = 4, max = 32, step = 1),
+                hr(),
+                numericInput(ns("ej_sist_media_pob"), "Media DAP población (cm)",
+                             value = 25, min = 5, max = 100, step = 1),
+                numericInput(ns("ej_sist_sd_pob"), "Desvío estándar población (cm)",
+                             value = 8, min = 1, max = 40, step = 1),
+                numericInput(ns("ej_sist_seed"), "Semilla aleatoria",
+                             value = 42, min = 1, max = 9999, step = 1),
+                hr(),
+                checkboxInput(ns("ej_sist_periodico"),
+                              "Simular patrón periódico en la población",
+                              value = FALSE),
+                uiOutput(ns("ej_sist_periodo_ui")),
+                hr(),
+                actionButton(ns("ej_sist_muestrear"), "Tomar muestra",
+                             class = "btn-primary w-100", icon = icon("shuffle")),
+                br(), br(),
+                actionButton(ns("ej_sist_resetear"), "Reiniciar",
+                             class = "btn-outline-secondary w-100", icon = icon("rotate-left"))
+              )
+            ),
+
+            div(
+              uiOutput(ns("ej_sist_metricas")),
+              br(),
+              bslib::card(
+                fill = FALSE, full_screen = FALSE,
+                bslib::card_header(
+                  tagList(bsicons::bs_icon("map", class = "me-1"),
+                          "Cuadrantes en patrón regular")
+                ),
+                plotOutput(ns("ej_sist_plot"), height = "400px"),
+                div(class = "px-3 pb-2 small text-muted",
+                    "Cuadrante resaltado = seleccionado en la muestra · todos los árboles dentro se miden.")
+              ),
+              br(),
+              bslib::card(
+                fill = FALSE, full_screen = FALSE,
+                bslib::card_header(
+                  tagList(bsicons::bs_icon("table", class = "me-1"), "Árboles medidos")
+                ),
+                bslib::card_body(uiOutput(ns("ej_sist_tabla_wrap")))
+              )
+            )
+          )
+        )
+      ),
+
+      # ── Sub-pestaña: Por conglomerados ──
+      bslib::nav_panel(
+        title    = "Por conglomerados",
+        value    = "congl",
+        fillable = FALSE,
+        div(
+          class = "pt-3",
+
+          p(class = "text-muted small mb-3",
+            "La población está dividida en una grilla más gruesa de 4 × 4 = 16
+             conglomerados. Al muestrear se sortean conglomerados completos y
+             se mide cada árbol dentro de ellos — no todos tendrán la misma
+             cantidad de árboles, así que compará los dos estimadores."),
+
+          bslib::layout_columns(
+            col_widths = c(3, 9),
+
+            bslib::card(
+              fill = FALSE, full_screen = FALSE,
+              bslib::card_header(
+                tagList(bsicons::bs_icon("sliders", class = "me-1"), "Parámetros")
+              ),
+              bslib::card_body(
+                numericInput(ns("ej_congl_N"), "Árboles en la población (N)",
+                             value = 100, min = 40, max = 200, step = 10),
+                numericInput(ns("ej_congl_m"), "Conglomerados a muestrear (de 16)",
+                             value = 4, min = 1, max = 8, step = 1),
+                hr(),
+                numericInput(ns("ej_congl_media_pob"), "Media DAP población (cm)",
+                             value = 25, min = 5, max = 100, step = 1),
+                numericInput(ns("ej_congl_sd_pob"), "Desvío estándar población (cm)",
+                             value = 8, min = 1, max = 40, step = 1),
+                numericInput(ns("ej_congl_seed"), "Semilla aleatoria",
+                             value = 42, min = 1, max = 9999, step = 1),
+                hr(),
+                actionButton(ns("ej_congl_muestrear"), "Tomar muestra",
+                             class = "btn-primary w-100", icon = icon("shuffle")),
+                br(), br(),
+                actionButton(ns("ej_congl_resetear"), "Reiniciar",
+                             class = "btn-outline-secondary w-100", icon = icon("rotate-left"))
+              )
+            ),
+
+            div(
+              uiOutput(ns("ej_congl_metricas")),
+              br(),
+              bslib::card(
+                fill = FALSE, full_screen = FALSE,
+                bslib::card_header(
+                  tagList(bsicons::bs_icon("map", class = "me-1"),
+                          "Conglomerados en el área de estudio")
+                ),
+                plotOutput(ns("ej_congl_plot"), height = "400px"),
+                div(class = "px-3 pb-2 small text-muted",
+                    "Conglomerado resaltado = seleccionado en la muestra · todos los árboles dentro se miden.")
+              ),
+              br(),
+              bslib::layout_columns(
+                col_widths = c(6, 6),
+                bslib::card(
+                  fill = FALSE, full_screen = FALSE,
+                  bslib::card_header(
+                    tagList(bsicons::bs_icon("diagram-3-fill", class = "me-1"), "Detalle por conglomerado")
+                  ),
+                  bslib::card_body(uiOutput(ns("ej_congl_detalle_wrap")))
+                ),
+                bslib::card(
+                  fill = FALSE, full_screen = FALSE,
+                  bslib::card_header(
+                    tagList(bsicons::bs_icon("calculator", class = "me-1"), "Fórmulas de los estimadores")
+                  ),
+                  bslib::card_body(
+                    withMathJax(
+                      p(class = "small mb-2", "Media de medias:"),
+                      p("$$\\bar{y} = \\frac{1}{m}\\sum_{i=1}^{m} \\bar{y}_i$$"),
+                      p(class = "small mb-2 mt-2", "Razón combinada:"),
+                      p("$$\\bar{y}_r = \\frac{\\sum_{i=1}^{m} \\sum_j y_{ij}}{\\sum_{i=1}^{m} n_i}$$"),
+                      p(class = "small text-muted mb-0",
+                        "Donde m = conglomerados muestreados, \\(\\bar{y}_i\\) = media del
+                         conglomerado i, y \\(n_i\\) = árboles medidos en el conglomerado i.")
+                    )
+                  )
                 )
+              ),
+              br(),
+              bslib::card(
+                fill = FALSE, full_screen = FALSE,
+                bslib::card_header(
+                  tagList(bsicons::bs_icon("table", class = "me-1"), "Árboles medidos")
+                ),
+                bslib::card_body(uiOutput(ns("ej_congl_tabla_wrap")))
               )
             )
           )
         )
       )
+    )
+  )
+)
     )
   )
 }
@@ -1551,243 +1865,665 @@ mod_muestreo_server <- function(id) {
       )
     })
 
-    # ── Ejercicio MAS ─────────────────────────────────────
+# ── Ejercicio: constantes de grilla ──────────────────
 
-    poblacion_rv <- reactiveVal(NULL)
-    muestra_rv   <- reactiveVal(NULL)
-    n_muestreo   <- reactiveVal(0)   # contador de muestreos para variar seed
+EJ_NCOL <- 8L; EJ_NROW <- 8L            # grilla fina: MAS, Sistemático
+EJ_CONGL_NCOL <- 4L; EJ_CONGL_NROW <- 4L # grilla gruesa: Conglomerados
 
-    # Generar población cuando cambian parámetros
-    observeEvent(
-      list(input$ej_N, input$ej_media_pob, input$ej_sd_pob, input$ej_seed),
-      {
-        N     <- input$ej_N
-        media <- input$ej_media_pob
-        sd    <- input$ej_sd_pob
-        seed  <- input$ej_seed
-        req(N > 0, media > 0, sd > 0)
-        set.seed(seed)
-        dap <- round(rnorm(N, mean = media, sd = sd), 1)
-        dap <- pmax(dap, 1)
-        poblacion_rv(data.frame(id = seq_len(N), dap = dap, seleccionado = FALSE))
-        muestra_rv(NULL)
-        n_muestreo(0)
-      },
-      ignoreNULL = FALSE
+# Estratificado usa una grilla más ancha que alta (14 x 8, celdas cuadradas de
+# igual tamaño que las demás: 17.5/14 = 10/8 = 1.25) para que los 3 estratos
+# tengan espacio suficiente para distinguirse en pantalla.
+EJ_ESTRAT_NCOL  <- 14L; EJ_ESTRAT_NROW <- 8L
+EJ_ESTRAT_ANCHO <- 17.5; EJ_ESTRAT_ALTO <- 10
+
+# ── Ejercicio: Aleatorio simple (MAS) ────────────────
+
+poblacion_rv     <- reactiveVal(NULL)
+muestra_rv       <- reactiveVal(NULL)
+cuadrantes_rv    <- reactiveVal(NULL)   # ids de cuadrantes seleccionados
+n_muestreo       <- reactiveVal(0)
+
+observeEvent(
+  list(input$ej_N, input$ej_media_pob, input$ej_sd_pob, input$ej_seed),
+  {
+    N <- input$ej_N; media <- input$ej_media_pob; sd <- input$ej_sd_pob; seed <- input$ej_seed
+    req(N > 0, media > 0, sd > 0)
+    pob <- generar_poblacion_natural(N, media, sd, seed)
+    pob$qid <- asignar_cuadrante(pob$x, pob$y, EJ_NCOL, EJ_NROW)
+    poblacion_rv(pob)
+    muestra_rv(NULL)
+    cuadrantes_rv(NULL)
+    n_muestreo(0)
+  },
+  ignoreNULL = FALSE
+)
+
+observeEvent(input$ej_muestrear, {
+  pob <- poblacion_rv()
+  req(pob)
+  total_q <- EJ_NCOL * EJ_NROW
+  nq <- min(input$ej_nq, total_q)
+  req(nq >= 1)
+  cnt <- n_muestreo() + 1
+  set.seed(input$ej_seed * 100 + cnt)
+  q_sel <- sample(total_q, nq)
+  pob$seleccionado <- pob$qid %in% q_sel
+  poblacion_rv(pob)
+  muestra_rv(pob[pob$seleccionado, ])
+  cuadrantes_rv(q_sel)
+  n_muestreo(cnt)
+})
+
+observeEvent(input$ej_resetear, {
+  N <- input$ej_N; media <- input$ej_media_pob; sd <- input$ej_sd_pob; seed <- input$ej_seed
+  req(N > 0)
+  pob <- generar_poblacion_natural(N, media, sd, seed)
+  pob$qid <- asignar_cuadrante(pob$x, pob$y, EJ_NCOL, EJ_NROW)
+  poblacion_rv(pob)
+  muestra_rv(NULL)
+  cuadrantes_rv(NULL)
+  n_muestreo(0)
+})
+
+output$ej_metricas <- renderUI({
+  m <- muestra_rv(); q_sel <- cuadrantes_rv()
+
+  if (is.null(m)) {
+    return(
+      div(class = "alert alert-info d-flex align-items-center gap-2",
+          bsicons::bs_icon("info-circle-fill"),
+          span("Configurá los parámetros y presioná ",
+               strong("Tomar muestra"), " para ver los resultados."))
     )
+  }
 
-    # Tomar muestra
-    observeEvent(input$ej_muestrear, {
-      pob <- poblacion_rv()
-      req(pob)
-      n   <- min(input$ej_n, nrow(pob))
-      req(n >= 2)
-      cnt <- n_muestreo() + 1
-      set.seed(input$ej_seed * 100 + cnt)
-      idx <- sample(nrow(pob), n)
-      pob$seleccionado        <- FALSE
-      pob$seleccionado[idx]   <- TRUE
-      poblacion_rv(pob)
-      muestra_rv(pob[idx, ])
-      n_muestreo(cnt)
-    })
+  Q <- EJ_NCOL * EJ_NROW
+  nq    <- length(q_sel)
+  n_arb <- nrow(m)
+  x_bar <- if (n_arb > 0) mean(m$dap) else NA
+  s     <- if (n_arb > 1) sd(m$dap) else 0
+  ee    <- if (n_arb > 0) s / sqrt(n_arb) else NA
+  fpc   <- sqrt((Q - nq) / (Q - 1))
+  ee_c  <- ee * fpc
 
-    # Reiniciar
-    observeEvent(input$ej_resetear, {
-      N     <- input$ej_N
-      media <- input$ej_media_pob
-      sd    <- input$ej_sd_pob
-      seed  <- input$ej_seed
-      req(N > 0)
-      set.seed(seed)
-      dap <- round(rnorm(N, mean = media, sd = sd), 1)
-      dap <- pmax(dap, 1)
-      poblacion_rv(data.frame(id = seq_len(N), dap = dap, seleccionado = FALSE))
-      muestra_rv(NULL)
-      n_muestreo(0)
-    })
+  tagList(
+    bslib::layout_columns(
+      col_widths = c(3, 3, 3, 3),
+      value_box(title = "Cuadrantes muestreados", value = paste0(nq, " de ", Q),
+                showcase = bsicons::bs_icon("grid-3x3-gap-fill"), theme = "primary"),
+      value_box(title = "Árboles medidos", value = n_arb,
+                showcase = bsicons::bs_icon("people-fill"),
+                theme = value_box_theme(bg = colores$secundario)),
+      value_box(title = "Media muestral", value = if (n_arb > 0) paste0(round(x_bar, 2), " cm") else "—",
+                showcase = bsicons::bs_icon("rulers"),
+                theme = value_box_theme(bg = colores$acento)),
+      value_box(title = "Error estándar (aprox.)", value = if (n_arb > 1) paste0(round(ee_c, 3), " cm") else "—",
+                showcase = bsicons::bs_icon("bullseye"), theme = "secondary")
+    ),
+    div(
+      class = "d-flex align-items-start gap-2 mt-3 small alert alert-light border",
+      bsicons::bs_icon("lightbulb-fill"),
+      p(sprintf(
+        "Se sortearon %d de %d cuadrantes y se midió cada árbol dentro de
+         ellos (%d en total; algunos cuadrantes pueden no tener árboles, es
+         parte de la variabilidad natural). El error estándar trata a los
+         árboles medidos como una muestra simple — es una aproximación:
+         el diseño real es un muestreo por conglomerados de cuadrantes, cuya
+         varianza exacta depende de cómo se reparten los árboles entre
+         cuadrantes.",
+        nq, Q, n_arb
+      ), class = "mb-0")
+    )
+  )
+})
 
-    # Métricas
-    output$ej_metricas <- renderUI({
-      m <- muestra_rv()
+output$ej_plot <- renderPlot({
+  pob <- poblacion_rv(); req(pob)
+  q_sel <- cuadrantes_rv()
+  celdas <- construir_grilla(EJ_NCOL, EJ_NROW)
 
-      if (is.null(m)) {
-        return(
-          div(
-            class = "alert alert-info d-flex align-items-center gap-2",
-            bsicons::bs_icon("info-circle-fill"),
-            span("Configurá los parámetros y presioná ",
-                 strong("Tomar muestra"), " para ver los resultados.")
-          )
-        )
-      }
+  p <- ggplot()
+  p <- agregar_celdas_grilla(p, celdas, q_sel, colores)
+  agregar_puntos_grilla(p, pob, colores)
+}, res = 110)
 
-      n     <- nrow(m)
-      N     <- input$ej_N
-      x_bar <- mean(m$dap)
-      s     <- sd(m$dap)
-      ee    <- s / sqrt(n)
-      # Error estándar con corrección por población finita
-      fpc   <- sqrt((N - n) / (N - 1))
-      ee_c  <- ee * fpc
-      ic_lo <- x_bar - qt(0.975, df = n - 1) * ee
-      ic_hi <- x_bar + qt(0.975, df = n - 1) * ee
+output$ej_tabla_wrap <- renderUI({
+  m <- muestra_rv()
+  if (is.null(m)) return(p("Aún no se tomó ninguna muestra.", class = "text-muted small"))
+  DT::dataTableOutput(ns("ej_tabla"))
+})
 
-      frac_pct <- n / N * 100
-      dif_pct  <- (1 - fpc) * 100
+output$ej_tabla <- DT::renderDataTable({
+  m <- muestra_rv()
+  req(m)
+  tbl <- m[order(m$qid, m$id), c("qid", "id", "dap")]
+  colnames(tbl) <- c("Cuadrante", "ID árbol", "DAP (cm)")
+  DT::datatable(tbl, options = list(pageLength = 10, dom = "tp", scrollX = TRUE),
+                rownames = FALSE, class = "compact stripe")
+})
 
-      fpc_info <- if (frac_pct < 5) {
-        list(
-          clase = "alert-success",
-          icono = bsicons::bs_icon("check-circle-fill"),
-          texto = sprintf(
-            "Fracción de muestreo: %.1f%% (n/N = %d/%d). La corrección por población finita tiene efecto mínimo (FPC = %.4f, reducción del EE: %.1f%%). Con fracciones menores al 5%%, el EE sin corrección (%.3f cm) y con corrección (%.3f cm) son prácticamente iguales.",
-            frac_pct, n, N, fpc, dif_pct, ee, ee_c
-          )
-        )
-      } else if (frac_pct < 20) {
-        list(
-          clase = "alert-warning",
-          icono = bsicons::bs_icon("exclamation-triangle-fill"),
-          texto = sprintf(
-            "Fracción de muestreo: %.1f%% (n/N = %d/%d). La corrección por población finita tiene efecto apreciable (FPC = %.4f, reducción del EE: %.1f%%). El EE sin corrección sería %.3f cm; con la corrección es %.3f cm. Se recomienda aplicarla cuando la fracción supera el 5%%.",
-            frac_pct, n, N, fpc, dif_pct, ee, ee_c
-          )
-        )
-      } else {
-        list(
-          clase = "alert-danger",
-          icono = bsicons::bs_icon("exclamation-octagon-fill"),
-          texto = sprintf(
-            "Fracción de muestreo alta: %.1f%% (n/N = %d/%d). La corrección reduce sustancialmente el EE (FPC = %.4f, reducción: %.1f%%). EE sin corrección: %.3f cm → con corrección: %.3f cm. Con fracciones tan altas, conviene evaluar si es factible censar toda la población.",
-            frac_pct, n, N, fpc, dif_pct, ee, ee_c
-          )
-        )
-      }
 
-      tagList(
-        bslib::layout_columns(
-          col_widths = c(3, 3, 3, 3),
-          value_box(
-            title    = "Media muestral (\u0078\u0305)",
-            value    = paste0(round(x_bar, 2), " cm"),
-            showcase = bsicons::bs_icon("rulers"),
-            theme    = "primary"
-          ),
-          value_box(
-            title    = "Desvío estándar (s)",
-            value    = paste0(round(s, 2), " cm"),
-            showcase = bsicons::bs_icon("distribute-vertical"),
-            theme    = value_box_theme(bg = colores$secundario)
-          ),
-          value_box(
-            title    = "Error estándar (EE)",
-            value    = paste0(round(ee_c, 3), " cm"),
-            showcase = bsicons::bs_icon("bullseye"),
-            theme    = value_box_theme(bg = colores$acento)
-          ),
-          value_box(
-            title    = "IC 95%",
-            value    = paste0("[", round(ic_lo, 1), " \u2013 ", round(ic_hi, 1), "]"),
-            showcase = bsicons::bs_icon("arrows-expand"),
-            theme    = value_box_theme(bg = "#5FA2CE")
-          )
-        ),
-        div(
-          class = paste("d-flex align-items-start gap-2 mt-3 small alert", fpc_info$clase),
-          fpc_info$icono,
-          p(fpc_info$texto, class = "mb-0")
-        )
+# ── Ejercicio: Estratificado ─────────────────────────
+
+estratos_def <- data.frame(
+  estrato = c("Bosque primario", "Bosque secundario", "Pastizal"),
+  media   = c(35, 22, 10),
+  sd      = c(7, 5, 3),
+  color   = c(colores$primario, colores$secundario, colores$texto),
+  qx0     = c(1, 6, 10),
+  qx1     = c(5, 9, 14),
+  Nq      = c(40, 32, 40),
+  N       = c(53, 35, 42),
+  stringsAsFactors = FALSE
+)
+
+poblacion_estrat_rv <- reactiveVal(NULL)
+muestra_estrat_rv   <- reactiveVal(NULL)
+cuadrantes_estrat_rv <- reactiveVal(NULL)
+n_muestreo_estrat   <- reactiveVal(0)
+
+generar_poblacion_estrat <- function(seed) {
+  set.seed(seed)
+  cw <- EJ_ESTRAT_ANCHO / EJ_ESTRAT_NCOL
+  filas <- lapply(seq_len(nrow(estratos_def)), function(i) {
+    e  <- estratos_def[i, ]
+    xr <- c((e$qx0 - 1) * cw, e$qx1 * cw)
+    sub <- generar_poblacion_natural(e$N, e$media, e$sd, seed + i * 17, xr = xr, yr = c(0, EJ_ESTRAT_ALTO))
+    sub$estrato    <- e$estrato
+    sub$color_base <- e$color
+    sub$qid        <- asignar_cuadrante(sub$x, sub$y, EJ_ESTRAT_NCOL, EJ_ESTRAT_NROW,
+                                         ancho = EJ_ESTRAT_ANCHO, alto = EJ_ESTRAT_ALTO)
+    sub
+  })
+  do.call(rbind, filas)
+}
+
+observeEvent(input$ej_estrat_seed, {
+  req(input$ej_estrat_seed)
+  poblacion_estrat_rv(generar_poblacion_estrat(input$ej_estrat_seed))
+  muestra_estrat_rv(NULL)
+  cuadrantes_estrat_rv(NULL)
+  n_muestreo_estrat(0)
+}, ignoreNULL = FALSE)
+
+observeEvent(input$ej_estrat_prop, {
+  total_n <- sum(input$ej_estrat_nA, input$ej_estrat_nB, input$ej_estrat_nC, na.rm = TRUE)
+  req(total_n > 0)
+  nh_prop <- pmax(round(total_n * estratos_def$Nq / sum(estratos_def$Nq)), 1)
+  updateNumericInput(session, "ej_estrat_nA", value = nh_prop[1])
+  updateNumericInput(session, "ej_estrat_nB", value = nh_prop[2])
+  updateNumericInput(session, "ej_estrat_nC", value = nh_prop[3])
+})
+
+observeEvent(input$ej_estrat_muestrear, {
+  pob <- poblacion_estrat_rv()
+  req(pob)
+  nh <- c(input$ej_estrat_nA, input$ej_estrat_nB, input$ej_estrat_nC)
+  req(all(nh >= 1))
+  cnt <- n_muestreo_estrat() + 1
+  set.seed(input$ej_estrat_seed * 100 + cnt)
+
+  q_sel_total <- c()
+  for (i in seq_len(nrow(estratos_def))) {
+    e <- estratos_def[i, ]
+    quads_estrato <- (e$qx0):(e$qx1)
+    quads_estrato <- unlist(lapply(quads_estrato, function(qx) qx + (0:(EJ_ESTRAT_NROW - 1)) * EJ_ESTRAT_NCOL))
+    n_i <- min(nh[i], length(quads_estrato))
+    q_sel_total <- c(q_sel_total, sample(quads_estrato, n_i))
+  }
+
+  pob$seleccionado <- pob$qid %in% q_sel_total
+  poblacion_estrat_rv(pob)
+  muestra_estrat_rv(pob[pob$seleccionado, ])
+  cuadrantes_estrat_rv(q_sel_total)
+  n_muestreo_estrat(cnt)
+})
+
+observeEvent(input$ej_estrat_resetear, {
+  req(input$ej_estrat_seed)
+  poblacion_estrat_rv(generar_poblacion_estrat(input$ej_estrat_seed))
+  muestra_estrat_rv(NULL)
+  cuadrantes_estrat_rv(NULL)
+  n_muestreo_estrat(0)
+})
+
+output$ej_estrat_metricas <- renderUI({
+  m <- muestra_estrat_rv()
+
+  if (is.null(m)) {
+    return(
+      div(class = "alert alert-info d-flex align-items-center gap-2",
+          bsicons::bs_icon("info-circle-fill"),
+          span("Configurá el número de cuadrantes por estrato y presioná ",
+               strong("Tomar muestra"), "."))
+    )
+  }
+
+  Q <- sum(estratos_def$Nq)
+  resumen <- do.call(rbind, lapply(seq_len(nrow(estratos_def)), function(i) {
+    nombre <- estratos_def$estrato[i]
+    sub    <- m[m$estrato == nombre, ]
+    nh_i   <- c(input$ej_estrat_nA, input$ej_estrat_nB, input$ej_estrat_nC)[i]
+    data.frame(
+      estrato = nombre,
+      Nq      = estratos_def$Nq[i],
+      nq      = nh_i,
+      media_h = if (nrow(sub) > 0) mean(sub$dap) else NA,
+      var_h   = if (nrow(sub) > 1) var(sub$dap) else 0
+    )
+  }))
+
+  resumen$Wh <- resumen$Nq / Q
+  y_st <- sum(resumen$Wh * resumen$media_h, na.rm = TRUE)
+
+  var_st <- sum(
+    (resumen$Wh^2) * (resumen$var_h / pmax(resumen$nq, 1)) * (1 - resumen$nq / resumen$Nq),
+    na.rm = TRUE
+  )
+  ee_st    <- sqrt(var_st)
+  nq_total <- sum(resumen$nq)
+  n_arb    <- nrow(m)
+
+  tagList(
+    bslib::layout_columns(
+      col_widths = c(3, 3, 3, 3),
+      value_box(title = "Cuadrantes muestreados", value = paste0(nq_total, " de ", Q),
+                showcase = bsicons::bs_icon("grid-3x3-gap-fill"), theme = "primary"),
+      value_box(title = "Árboles medidos", value = n_arb,
+                showcase = bsicons::bs_icon("people-fill"),
+                theme = value_box_theme(bg = colores$secundario)),
+      value_box(title = "Estimación combinada", value = paste0(round(y_st, 2), " cm"),
+                showcase = bsicons::bs_icon("rulers"),
+                theme = value_box_theme(bg = colores$acento)),
+      value_box(title = "Error estándar (aprox.)", value = paste0(round(ee_st, 3), " cm"),
+                showcase = bsicons::bs_icon("bullseye"), theme = "secondary")
+    ),
+    div(
+      class = "d-flex align-items-start gap-2 mt-3 small alert alert-light border",
+      bsicons::bs_icon("lightbulb-fill"),
+      p(sprintf(
+        "La estimación combinada pondera la media de cada estrato por su peso
+         en la grilla (Wh = cuadrantes del estrato / cuadrantes totales = %s
+         — cuanto más grande el estrato, más pesa su media). Probá
+         «Asignación proporcional» y compará el error estándar contra una
+         asignación igualitaria para ver el efecto.",
+        paste(round(resumen$Wh, 2), collapse = " / ")
+      ), class = "mb-0")
+    )
+  )
+})
+
+output$ej_estrat_plot <- renderPlot({
+  pob <- poblacion_estrat_rv()
+  req(pob)
+  q_sel <- cuadrantes_estrat_rv()
+  celdas <- construir_grilla(EJ_ESTRAT_NCOL, EJ_ESTRAT_NROW,
+                              ancho = EJ_ESTRAT_ANCHO, alto = EJ_ESTRAT_ALTO)
+  cw <- EJ_ESTRAT_ANCHO / EJ_ESTRAT_NCOL
+
+  p <- ggplot()
+  for (i in seq_len(nrow(estratos_def))) {
+    e <- estratos_def[i, ]
+    p <- p +
+      annotate("rect", xmin = (e$qx0 - 1) * cw, xmax = e$qx1 * cw, ymin = 0, ymax = EJ_ESTRAT_ALTO,
+               fill = e$color, alpha = 0.06) +
+      annotate("text", x = ((e$qx0 - 1) * cw + e$qx1 * cw) / 2, y = EJ_ESTRAT_ALTO - 0.15, label = e$estrato,
+               size = 3.5, color = e$color, fontface = "bold")
+  }
+
+  p <- agregar_celdas_grilla(p, celdas, q_sel, colores)
+  agregar_puntos_grilla(p, pob, colores,
+                         xlim = c(0, EJ_ESTRAT_ANCHO), ylim = c(0, EJ_ESTRAT_ALTO))
+}, res = 110)
+
+output$ej_estrat_tabla_wrap <- renderUI({
+  m <- muestra_estrat_rv()
+  if (is.null(m)) return(p("Aún no se tomó ninguna muestra.", class = "text-muted small"))
+  DT::dataTableOutput(ns("ej_estrat_tabla"))
+})
+
+output$ej_estrat_tabla <- DT::renderDataTable({
+  m <- muestra_estrat_rv()
+  req(m)
+  tbl <- m[order(m$estrato, m$qid, m$id), c("qid", "id", "estrato", "dap")]
+  colnames(tbl) <- c("Cuadrante", "ID árbol", "Estrato", "DAP (cm)")
+  DT::datatable(tbl, options = list(pageLength = 10, dom = "tp", scrollX = TRUE),
+                rownames = FALSE, class = "compact stripe")
+})
+
+
+# ── Ejercicio: Sistemático (cuadrantes en patrón regular) ──
+
+poblacion_sist_rv  <- reactiveVal(NULL)
+muestra_sist_rv    <- reactiveVal(NULL)
+cuadrantes_sist_rv <- reactiveVal(NULL)
+n_muestreo_sist    <- reactiveVal(0)
+espaciado_sist_rv  <- reactiveVal(NULL)
+inicio_sist_rv     <- reactiveVal(NULL)
+
+output$ej_sist_periodo_ui <- renderUI({
+  if (isTRUE(input$ej_sist_periodico)) {
+    numericInput(ns("ej_sist_periodo"),
+                 "Período del patrón (en unidades del área, 0–10)",
+                 value = 2.5, min = 0.5, max = 5, step = 0.5)
+  }
+})
+
+generar_poblacion_sist <- function(N, media, sd, seed, periodico, periodo) {
+  pob <- generar_poblacion_natural(N, media, sd, seed)
+  if (isTRUE(periodico) && !is.null(periodo) && periodo >= 0.5) {
+    set.seed(seed + 999)
+    ajuste <- (sd * 0.9) * sin(2 * pi * pob$x / periodo)
+    pob$dap <- pmax(round(pob$dap + ajuste, 1), 1)
+  }
+  pob$qid <- asignar_cuadrante(pob$x, pob$y, EJ_NCOL, EJ_NROW)
+  pob
+}
+
+observeEvent(
+  list(input$ej_sist_N, input$ej_sist_media_pob, input$ej_sist_sd_pob,
+       input$ej_sist_seed, input$ej_sist_periodico, input$ej_sist_periodo),
+  {
+    req(input$ej_sist_N, input$ej_sist_media_pob, input$ej_sist_sd_pob, input$ej_sist_seed)
+    poblacion_sist_rv(generar_poblacion_sist(
+      input$ej_sist_N, input$ej_sist_media_pob, input$ej_sist_sd_pob,
+      input$ej_sist_seed, input$ej_sist_periodico, input$ej_sist_periodo
+    ))
+    muestra_sist_rv(NULL)
+    cuadrantes_sist_rv(NULL)
+    espaciado_sist_rv(NULL)
+    inicio_sist_rv(NULL)
+    n_muestreo_sist(0)
+  },
+  ignoreNULL = FALSE
+)
+
+observeEvent(input$ej_sist_muestrear, {
+  pob <- poblacion_sist_rv()
+  req(pob)
+  nq_deseado <- max(4, input$ej_sist_nq)
+  lado <- max(2, round(sqrt(nq_deseado)))
+  sx <- max(1, round(EJ_NCOL / lado))
+  sy <- max(1, round(EJ_NROW / lado))
+  cnt <- n_muestreo_sist() + 1
+  set.seed(input$ej_sist_seed * 100 + cnt)
+  qx0 <- sample(seq_len(sx), 1)
+  qy0 <- sample(seq_len(sy), 1)
+  qxs <- seq(qx0, EJ_NCOL, by = sx)
+  qys <- seq(qy0, EJ_NROW, by = sy)
+  grilla_sel <- expand.grid(qx = qxs, qy = qys)
+  q_sel <- (grilla_sel$qy - 1) * EJ_NCOL + grilla_sel$qx
+
+  pob$seleccionado <- pob$qid %in% q_sel
+  poblacion_sist_rv(pob)
+  muestra_sist_rv(pob[pob$seleccionado, ])
+  cuadrantes_sist_rv(q_sel)
+  espaciado_sist_rv(c(sx, sy))
+  inicio_sist_rv(c(qx0, qy0))
+  n_muestreo_sist(cnt)
+})
+
+observeEvent(input$ej_sist_resetear, {
+  req(input$ej_sist_N, input$ej_sist_seed)
+  poblacion_sist_rv(generar_poblacion_sist(
+    input$ej_sist_N, input$ej_sist_media_pob, input$ej_sist_sd_pob,
+    input$ej_sist_seed, input$ej_sist_periodico, input$ej_sist_periodo
+  ))
+  muestra_sist_rv(NULL)
+  cuadrantes_sist_rv(NULL)
+  espaciado_sist_rv(NULL)
+  inicio_sist_rv(NULL)
+  n_muestreo_sist(0)
+})
+
+output$ej_sist_metricas <- renderUI({
+  m <- muestra_sist_rv()
+
+  if (is.null(m)) {
+    return(
+      div(class = "alert alert-info d-flex align-items-center gap-2",
+          bsicons::bs_icon("info-circle-fill"),
+          span("Definí cuántos cuadrantes querés aproximadamente y presioná ",
+               strong("Tomar muestra"), " para generar el patrón regular."))
+    )
+  }
+
+  Q  <- EJ_NCOL * EJ_NROW
+  esp <- espaciado_sist_rv()
+  nq_sel <- length(cuadrantes_sist_rv())
+  n_arb  <- nrow(m)
+  x_bar  <- mean(m$dap)
+  s      <- if (n_arb > 1) sd(m$dap) else 0
+  ee     <- if (n_arb > 0) s / sqrt(n_arb) else NA
+
+  riesgo <- NULL
+  if (isTRUE(input$ej_sist_periodico) && !is.null(input$ej_sist_periodo)) {
+    periodo <- input$ej_sist_periodo
+    espaciado_fisico <- esp[1] * (10 / EJ_NCOL)
+    ratio <- espaciado_fisico / periodo
+    if (abs(ratio - round(ratio)) < 0.15) {
+      riesgo <- div(
+        class = "d-flex align-items-start gap-2 mt-3 small alert alert-danger",
+        bsicons::bs_icon("exclamation-octagon-fill"),
+        p(sprintf(
+          "Riesgo de sesgo por aliasing: el espaciado de la grilla (%.2f
+           unidades) coincide o es múltiplo del período del patrón
+           poblacional (%.2f). El muestreo sistemático puede caer siempre en
+           la misma fase del ciclo y producir una estimación sesgada, aunque
+           n sea grande. Desactivá el patrón periódico o cambiá el número de
+           cuadrantes deseados para comparar.",
+          espaciado_fisico, periodo
+        ), class = "mb-0")
       )
-    })
+    }
+  }
 
-    # Gráfico
-    output$ej_plot <- renderPlot({
-      pob <- poblacion_rv()
-      m   <- muestra_rv()
-      req(pob)
+  tagList(
+    bslib::layout_columns(
+      col_widths = c(3, 3, 3, 3),
+      value_box(title = "Cuadrantes muestreados", value = paste0(nq_sel, " de ", Q),
+                showcase = bsicons::bs_icon("grid-3x3-gap-fill"), theme = "primary"),
+      value_box(title = "Árboles medidos", value = n_arb,
+                showcase = bsicons::bs_icon("people-fill"),
+                theme = value_box_theme(bg = colores$secundario)),
+      value_box(title = "Media muestral", value = paste0(round(x_bar, 2), " cm"),
+                showcase = bsicons::bs_icon("rulers"),
+                theme = value_box_theme(bg = colores$acento)),
+      value_box(title = "Patrón de la grilla", value = sprintf("cada %d × %d cuadr.", esp[1], esp[2]),
+                showcase = bsicons::bs_icon("distribute-horizontal"), theme = "secondary")
+    ),
+    if (!is.null(riesgo)) riesgo else div(
+      class = "d-flex align-items-start gap-2 mt-3 small alert alert-light border",
+      bsicons::bs_icon("lightbulb-fill"),
+      p(sprintf(
+        "Se seleccionó 1 de cada %d cuadrantes en columnas y 1 de cada %d en
+         filas, con un punto de inicio aleatorio. El error estándar trata a
+         los árboles medidos como una muestra simple (EE ≈ s/√n = %.3f cm)
+         como referencia simplificada.",
+        esp[1], esp[2], ee
+      ), class = "mb-0")
+    )
+  )
+})
 
-      p <- ggplot(pob, aes(x = dap)) +
-        geom_histogram(
-          fill  = colores$borde,
-          color = "white",
-          bins  = 30,
-          alpha = 0.9
-        ) +
-        labs(x = "DAP (cm)", y = "Frecuencia") +
-        theme_minimal(base_size = 13) +
-        theme(
-          panel.grid.minor  = element_blank(),
-          panel.grid.major.x = element_blank(),
-          plot.background   = element_rect(fill = "#FFFFFF", color = NA)
-        )
+output$ej_sist_plot <- renderPlot({
+  pob <- poblacion_sist_rv(); req(pob)
+  q_sel <- cuadrantes_sist_rv()
+  celdas <- construir_grilla(EJ_NCOL, EJ_NROW)
 
-      if (!is.null(m)) {
-        p <- p +
-          geom_histogram(
-            data  = m, aes(x = dap),
-            fill  = colores$primario,
-            color = "white",
-            bins  = 30,
-            alpha = 0.85
-          ) +
-          geom_vline(
-            xintercept = mean(m$dap),
-            color      = colores$acento,
-            linewidth  = 1.2,
-            linetype   = "dashed"
-          ) +
-          annotate(
-            "label",
-            x     = mean(m$dap),
-            y     = Inf,
-            label = paste0("\u0078\u0305 = ", round(mean(m$dap), 1), " cm"),
-            vjust = 1.5, hjust = -0.1,
-            color      = colores$acento,
-            fill       = "white",
-            label.size = 0.3,
-            size       = 4
-          )
+  p <- ggplot()
+  p <- agregar_celdas_grilla(p, celdas, q_sel, colores)
+  agregar_puntos_grilla(p, pob, colores)
+}, res = 110)
 
-        # Leyenda manual
-        p <- p +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf,
-                   fill = NA, color = NA) +
-          labs(
-            subtitle = paste0(
-              "Población (gris, N = ", nrow(pob), ")   |   ",
-              "Muestra (azul, n = ", nrow(m), ")"
-            )
-          ) +
-          theme(plot.subtitle = element_text(color = colores$texto, size = 11))
-      }
+output$ej_sist_tabla_wrap <- renderUI({
+  m <- muestra_sist_rv()
+  if (is.null(m)) return(p("Aún no se tomó ninguna muestra.", class = "text-muted small"))
+  DT::dataTableOutput(ns("ej_sist_tabla"))
+})
 
-      p
-    }, res = 110)
+output$ej_sist_tabla <- DT::renderDataTable({
+  m <- muestra_sist_rv()
+  req(m)
+  tbl <- m[order(m$qid, m$id), c("qid", "id", "dap")]
+  colnames(tbl) <- c("Cuadrante", "ID árbol", "DAP (cm)")
+  DT::datatable(tbl, options = list(pageLength = 10, dom = "tp", scrollX = TRUE),
+                rownames = FALSE, class = "compact stripe")
+})
 
-    # Tabla
-    output$ej_tabla_wrap <- renderUI({
-      m <- muestra_rv()
-      if (is.null(m)) {
-        return(p("Aún no se tomó ninguna muestra.", class = "text-muted small"))
-      }
-      tbl <- m[order(m$id), c("id", "dap")]
-      colnames(tbl) <- c("ID árbol", "DAP (cm)")
-      DT::dataTableOutput(ns("ej_tabla"))
-    })
 
-    output$ej_tabla <- DT::renderDataTable({
-      m <- muestra_rv()
-      req(m)
-      tbl <- m[order(m$id), c("id", "dap")]
-      colnames(tbl) <- c("ID árbol", "DAP (cm)")
-      DT::datatable(
-        tbl,
-        options  = list(pageLength = 10, dom = "tp", scrollX = TRUE),
-        rownames = FALSE,
-        class    = "compact stripe"
-      )
-    })
+# ── Ejercicio: Por conglomerados ─────────────────────
+
+poblacion_congl_rv  <- reactiveVal(NULL)
+muestra_congl_rv    <- reactiveVal(NULL)
+cuadrantes_congl_rv <- reactiveVal(NULL)
+n_muestreo_congl    <- reactiveVal(0)
+
+observeEvent(
+  list(input$ej_congl_N, input$ej_congl_media_pob, input$ej_congl_sd_pob, input$ej_congl_seed),
+  {
+    N <- input$ej_congl_N; media <- input$ej_congl_media_pob
+    sd <- input$ej_congl_sd_pob; seed <- input$ej_congl_seed
+    req(N > 0, media > 0, sd > 0)
+    pob <- generar_poblacion_natural(N, media, sd, seed)
+    pob$qid <- asignar_cuadrante(pob$x, pob$y, EJ_CONGL_NCOL, EJ_CONGL_NROW)
+    poblacion_congl_rv(pob)
+    muestra_congl_rv(NULL)
+    cuadrantes_congl_rv(NULL)
+    n_muestreo_congl(0)
+  },
+  ignoreNULL = FALSE
+)
+
+observeEvent(input$ej_congl_muestrear, {
+  pob <- poblacion_congl_rv()
+  req(pob)
+  total_q <- EJ_CONGL_NCOL * EJ_CONGL_NROW
+  m <- min(input$ej_congl_m, total_q)
+  req(m >= 1)
+  cnt <- n_muestreo_congl() + 1
+  set.seed(input$ej_congl_seed * 100 + cnt)
+  q_sel <- sample(total_q, m)
+  pob$seleccionado <- pob$qid %in% q_sel
+  poblacion_congl_rv(pob)
+  muestra_congl_rv(pob[pob$seleccionado, ])
+  cuadrantes_congl_rv(q_sel)
+  n_muestreo_congl(cnt)
+})
+
+observeEvent(input$ej_congl_resetear, {
+  N <- input$ej_congl_N; media <- input$ej_congl_media_pob
+  sd <- input$ej_congl_sd_pob; seed <- input$ej_congl_seed
+  req(N > 0)
+  pob <- generar_poblacion_natural(N, media, sd, seed)
+  pob$qid <- asignar_cuadrante(pob$x, pob$y, EJ_CONGL_NCOL, EJ_CONGL_NROW)
+  poblacion_congl_rv(pob)
+  muestra_congl_rv(NULL)
+  cuadrantes_congl_rv(NULL)
+  n_muestreo_congl(0)
+})
+
+output$ej_congl_metricas <- renderUI({
+  m <- muestra_congl_rv()
+
+  if (is.null(m)) {
+    return(
+      div(class = "alert alert-info d-flex align-items-center gap-2",
+          bsicons::bs_icon("info-circle-fill"),
+          span("Elegí cuántos conglomerados muestrear y presioná ",
+               strong("Tomar muestra"), "."))
+    )
+  }
+
+  Q <- EJ_CONGL_NCOL * EJ_CONGL_NROW
+  clusters_sel <- sort(unique(m$qid))
+  medias_i <- sapply(clusters_sel, function(cl) mean(m$dap[m$qid == cl]))
+  Ni_sel   <- sapply(clusters_sel, function(cl) sum(m$qid == cl))
+
+  y_no_pesado <- mean(medias_i)
+  y_razon     <- sum(m$dap) / sum(Ni_sel)
+  diff_est    <- abs(y_no_pesado - y_razon)
+
+  tagList(
+    bslib::layout_columns(
+      col_widths = c(3, 3, 3, 3),
+      value_box(title = "Conglomerados muestreados",
+                value = paste0(length(clusters_sel), " de ", Q),
+                showcase = bsicons::bs_icon("grid-3x3-gap-fill"), theme = "primary"),
+      value_box(title = "Árboles medidos", value = nrow(m),
+                showcase = bsicons::bs_icon("people-fill"),
+                theme = value_box_theme(bg = colores$secundario)),
+      value_box(title = "Estimación (media de medias)",
+                value = paste0(round(y_no_pesado, 2), " cm"),
+                showcase = bsicons::bs_icon("rulers"),
+                theme = value_box_theme(bg = colores$acento)),
+      value_box(title = "Estimación (razón combinada)",
+                value = paste0(round(y_razon, 2), " cm"),
+                showcase = bsicons::bs_icon("bullseye"), theme = "secondary")
+    ),
+    div(
+      class = "d-flex align-items-start gap-2 mt-3 small alert alert-light border",
+      bsicons::bs_icon("lightbulb-fill"),
+      p(sprintf(
+        "La media de medias trata cada conglomerado con igual peso, sin importar
+         cuántos árboles cayeron en él por azar; la razón combinada pondera por
+         el número de árboles medidos, por lo que suele ser más robusta cuando
+         los conglomerados quedan con tamaños muy distintos. La diferencia entre
+         ambas estimaciones (%.2f cm) es una señal de cuánto está afectando esa
+         diferencia de tamaño — revisá la tabla de detalle.",
+        diff_est
+      ), class = "mb-0")
+    )
+  )
+})
+
+output$ej_congl_plot <- renderPlot({
+  pob <- poblacion_congl_rv(); req(pob)
+  q_sel <- cuadrantes_congl_rv()
+  celdas <- construir_grilla(EJ_CONGL_NCOL, EJ_CONGL_NROW)
+
+  p <- ggplot()
+  p <- agregar_celdas_grilla(p, celdas, q_sel, colores)
+  agregar_puntos_grilla(p, pob, colores)
+}, res = 110)
+
+output$ej_congl_detalle_wrap <- renderUI({
+  m <- muestra_congl_rv()
+  if (is.null(m)) return(p("Aún no se tomó ninguna muestra.", class = "text-muted small"))
+  DT::dataTableOutput(ns("ej_congl_detalle_tabla"))
+})
+
+output$ej_congl_detalle_tabla <- DT::renderDataTable({
+  m <- muestra_congl_rv()
+  req(m)
+  detalle <- do.call(rbind, lapply(sort(unique(m$qid)), function(cl) {
+    sub <- m[m$qid == cl, ]
+    data.frame(
+      conglomerado = cl,
+      Ni      = nrow(sub),
+      media   = round(mean(sub$dap), 1),
+      sd      = round(if (nrow(sub) > 1) sd(sub$dap) else 0, 1)
+    )
+  }))
+  colnames(detalle) <- c("Conglomerado", "Árboles (Ni)", "Media DAP (cm)", "SD DAP (cm)")
+  DT::datatable(detalle, options = list(pageLength = 10, dom = "tp", scrollX = TRUE),
+                rownames = FALSE, class = "compact stripe")
+})
+
+output$ej_congl_tabla_wrap <- renderUI({
+  m <- muestra_congl_rv()
+  if (is.null(m)) return(p("Aún no se tomó ninguna muestra.", class = "text-muted small"))
+  DT::dataTableOutput(ns("ej_congl_tabla"))
+})
+
+output$ej_congl_tabla <- DT::renderDataTable({
+  m <- muestra_congl_rv()
+  req(m)
+  tbl <- m[order(m$qid, m$id), c("id", "qid", "dap")]
+  colnames(tbl) <- c("ID árbol", "Conglomerado", "DAP (cm)")
+  DT::datatable(tbl, options = list(pageLength = 10, dom = "tp", scrollX = TRUE),
+                rownames = FALSE, class = "compact stripe")
+})
 
     # ── Esquema visual ────────────────────────────────────
     output$esquema_plot <- renderPlot({

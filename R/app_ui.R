@@ -23,8 +23,8 @@ app_ui <- function() {
       "Manuel Sp\u00ednola \u00b7 ICOMVIS \u00b7 Universidad Nacional \u00b7 Costa Rica"
     ),
     bslib::nav_panel(title = "Tipos de estudio",       icon = bsicons::bs_icon("book"),             mod_tipos_ui("tipos")),
-    bslib::nav_panel(title = "Dise\u00f1os de muestreo",    icon = bsicons::bs_icon("grid"),             mod_muestreo_ui("muestreo")),
     bslib::nav_panel(title = "Fundamentos del dise\u00f1o", icon = bsicons::bs_icon("journal-bookmark"), mod_fundamentos_ui("fundamentos")),
+    bslib::nav_panel(title = "Dise\u00f1os de muestreo",    icon = bsicons::bs_icon("grid"),             mod_muestreo_ui("muestreo")),
     bslib::nav_panel(title = "Asistente",              icon = bsicons::bs_icon("compass"),          mod_asistente_ui("asistente")),
     bslib::nav_panel(title = "Ayuda",                  icon = bsicons::bs_icon("question-circle"),  mod_ayuda_ui("ayuda")),
     bslib::nav_panel(title = "Acerca de",              icon = bsicons::bs_icon("info-circle"),      mod_acerca_de_ui("acerca_de")),
