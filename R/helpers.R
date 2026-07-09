@@ -75,9 +75,9 @@ tema_app <- bs_theme(
 
   /* Tarjetas de tipo de estudio */
   .card-tipo { border-left: 4px solid; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; }
-  .card-descriptivo  { border-color: #5FA2CE; background-color: #f0f7fc; }
-  .card-observacional{ border-color: #FC7D0B; background-color: #fff8f2; }
-  .card-experimental { border-color: #1170AA; background-color: #f0f4fa; }
+  .card-descriptivo  { border-color: #5FA2CE; background-color: #dceefa; }
+  .card-observacional{ border-color: #FC7D0B; background-color: #ffe6ce; }
+  .card-experimental { border-color: #1170AA; background-color: #d6e6f7; }
 
   /* Tarjetas de diseño de muestreo */
   .card-muestreo { border: 1px solid #C8D9EC; border-radius: 8px;
