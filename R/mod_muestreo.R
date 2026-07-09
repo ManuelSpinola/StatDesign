@@ -25,30 +25,44 @@ esquema_ggplot <- function(tipo, colores) {
 
   if (tipo == "alea_simple") {
     celdas <- construir_grilla(8, 8)
-    sel    <- sample(64, 16)
-    pts <- do.call(rbind, lapply(sel, function(qid) {
-      cx <- celdas$x0[celdas$qid == qid]
-      cy <- celdas$y0[celdas$qid == qid]
-      data.frame(x = cx + runif(2, 0.15, 1.1), y = cy + runif(2, 0.15, 1.1))
-    }))
+    pob <- generar_poblacion_natural(60, 25, 8, 123)
+    pob$qid <- asignar_cuadrante(pob$x, pob$y, 8, 8)
+    sel <- sample(64, 16)
+    pob$seleccionado <- pob$qid %in% sel
+    pob$col   <- ifelse(pob$seleccionado, colores$acento, colores$secundario)
+    pob$alpha <- ifelse(pob$seleccionado, 1, 0.5)
+    pob$size  <- ifelse(pob$seleccionado, 3.2, 2.2)
+
     p <- agregar_celdas_grilla(base, celdas, sel, colores)
     p +
-      geom_point(data = pts, aes(x, y),
-                 color = colores$primario, size = 3, alpha = 0.9) +
+      geom_point(data = pob, aes(x, y), color = pob$col, alpha = pob$alpha, size = pob$size) +
       labs(title = "Aleatorio simple — 16 de 64 cuadrantes seleccionados al azar")
 
   } else if (tipo == "alea_estrat") {
     celdas <- construir_grilla(8, 8)
     zonas <- list(
-      list(nombre = "A", cols = 1:3, color = colores$primario),
-      list(nombre = "B", cols = 4:5, color = colores$acento),
-      list(nombre = "C", cols = 6:8, color = colores$secundario)
+      list(nombre = "A", cols = 1:3, color = colores$primario,   n = 22),
+      list(nombre = "B", cols = 4:5, color = colores$acento,     n = 15),
+      list(nombre = "C", cols = 6:8, color = colores$secundario, n = 22)
     )
+
+    pob <- do.call(rbind, lapply(seq_along(zonas), function(i) {
+      z  <- zonas[[i]]
+      xr <- c((min(z$cols) - 1) * 1.25, max(z$cols) * 1.25)
+      sub <- generar_poblacion_natural(z$n, 20, 6, 123 + i * 11, xr = xr, yr = c(0, 10))
+      sub$qid <- asignar_cuadrante(sub$x, sub$y, 8, 8)
+      sub
+    }))
+
     sel_por_zona <- lapply(zonas, function(z) {
       ids <- celdas$qid[celdas$qx %in% z$cols]
       sample(ids, 2)
     })
     sel <- unlist(sel_por_zona)
+    pob$seleccionado <- pob$qid %in% sel
+    pob$col   <- ifelse(pob$seleccionado, colores$acento, "#A3ACB9")
+    pob$alpha <- ifelse(pob$seleccionado, 1, 0.55)
+    pob$size  <- ifelse(pob$seleccionado, 3.2, 2.2)
 
     p <- base
     for (z in zonas) {
@@ -61,49 +75,38 @@ esquema_ggplot <- function(tipo, colores) {
                  size = 4, fontface = "bold", color = z$color)
     }
     p <- agregar_celdas_grilla(p, celdas, sel, colores)
-
-    pts <- do.call(rbind, lapply(sel_por_zona, function(ids) {
-      do.call(rbind, lapply(ids, function(qid) {
-        cx <- celdas$x0[celdas$qid == qid]
-        cy <- celdas$y0[celdas$qid == qid]
-        data.frame(x = cx + runif(2, 0.15, 1.1), y = cy + runif(2, 0.15, 1.1))
-      }))
-    }))
-
     p +
-      geom_point(data = pts, aes(x, y),
-                 color = colores$primario, size = 3, alpha = 0.9) +
+      geom_point(data = pob, aes(x, y), color = pob$col, alpha = pob$alpha, size = pob$size) +
       labs(title = "Aleatorio estratificado — 2 cuadrantes seleccionados por estrato")
 
   } else if (tipo == "sistematico") {
     celdas <- construir_grilla(8, 8)
+    pob <- generar_poblacion_natural(60, 25, 8, 321)
+    pob$qid <- asignar_cuadrante(pob$x, pob$y, 8, 8)
     sel <- celdas$qid[celdas$qx %in% c(2, 4, 6, 8) & celdas$qy %in% c(1, 3, 5, 7)]
-    pts <- do.call(rbind, lapply(sel, function(qid) {
-      cx <- celdas$x0[celdas$qid == qid]
-      cy <- celdas$y0[celdas$qid == qid]
-      data.frame(x = cx + runif(2, 0.15, 1.1), y = cy + runif(2, 0.15, 1.1))
-    }))
+    pob$seleccionado <- pob$qid %in% sel
+    pob$col   <- ifelse(pob$seleccionado, colores$acento, colores$secundario)
+    pob$alpha <- ifelse(pob$seleccionado, 1, 0.5)
+    pob$size  <- ifelse(pob$seleccionado, 3.2, 2.2)
+
     p <- agregar_celdas_grilla(base, celdas, sel, colores)
     p +
-      geom_point(data = pts, aes(x, y),
-                 color = colores$primario, size = 3, alpha = 0.9) +
+      geom_point(data = pob, aes(x, y), color = pob$col, alpha = pob$alpha, size = pob$size) +
       labs(title = "Sistemático — cuadrantes en patrón regular con inicio aleatorio")
 
   } else if (tipo == "conglomerados") {
     celdas <- construir_grilla(4, 4)
+    pob <- generar_poblacion_natural(60, 25, 8, 555)
+    pob$qid <- asignar_cuadrante(pob$x, pob$y, 4, 4)
     sel <- sample(16, 4)
-    pts <- do.call(rbind, lapply(seq_along(sel), function(i) {
-      qid <- sel[i]
-      cx  <- celdas$x0[celdas$qid == qid]
-      cy  <- celdas$y0[celdas$qid == qid]
-      n   <- sample(5:8, 1)
-      data.frame(x = cx + runif(n, 0.2, 2.3), y = cy + runif(n, 0.2, 2.3),
-                 cong = paste("Conglomerado", i))
-    }))
+    pob$seleccionado <- pob$qid %in% sel
+    pob$col   <- ifelse(pob$seleccionado, colores$acento, colores$secundario)
+    pob$alpha <- ifelse(pob$seleccionado, 1, 0.5)
+    pob$size  <- ifelse(pob$seleccionado, 3.2, 2.2)
+
     p <- agregar_celdas_grilla(base, celdas, sel, colores)
     p +
-      geom_point(data = pts, aes(x, y, color = cong), size = 3, alpha = 0.9) +
-      scale_color_tableau_cb() +
+      geom_point(data = pob, aes(x, y), color = pob$col, alpha = pob$alpha, size = pob$size) +
       labs(title = "Por conglomerados — 4 de 16 bloques seleccionados, todo medido dentro")
 
   } else if (tipo == "conveniencia") {
