@@ -9,8 +9,10 @@
 #   StatModels  — Modelos avanzados (próximamente)
 # ============================================================
 
-# ── Esquema: los tres pilares de un experimento riguroso ──
-# Vive arriba de los sub-tabs, visible sin importar cuál esté seleccionado.
+# Esquema: los tres pilares de un experimento riguroso, como SVG embebido
+# (geometría ya verificada visualmente; colores en hex literal). El texto
+# evita decir "inferencia causal válida" a secas — los tres pilares son
+# necesarios pero no suficientes, y el diagrama lo aclara explícitamente.
 esquema_pilares_fundamentos <- function() {
   div(
     class = "mb-4 p-3 rounded-3",
@@ -21,44 +23,49 @@ esquema_pilares_fundamentos <- function() {
       bsicons::bs_icon("diagram-3", class = "me-1"),
       "Los tres pilares de un experimento riguroso"),
 
-    div(
-      class = "text-center mb-2",
-      div(class = "d-inline-block px-3 py-2 rounded-3",
-          style = paste0("background:", colores$primario, "; color:#fff;"),
-          strong("Inferencia causal válida"), br(),
-          tags$small("¿X produce Y?"))
-    ),
-    div(class = "text-center small text-muted mb-3", "↑ sostenida por los tres pilares ↑"),
+    HTML('
+<svg viewBox="0 0 700 375" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:700px; display:block; margin:0 auto;">
+<title>Los tres pilares de un experimento riguroso</title>
+<desc>Diagrama que muestra aleatorización, replicación y control como los tres pilares que apoyan una inferencia causal más sólida, con la pseudoreplicación señalada como el error más común asociado a la replicación.</desc>
+<defs>
+<marker id="arrowFund" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0,0 L10,5 L0,10 z" fill="#8A8F98"></path>
+</marker>
+</defs>
 
-    bslib::layout_columns(
-      col_widths = c(4, 4, 4),
-      fill       = FALSE,
+<rect x="185" y="16" width="330" height="56" rx="10" fill="#ECEFF3" stroke="#B7C2CE"></rect>
+<text x="350" y="40" text-anchor="middle" font-size="15" font-weight="600" fill="#33383D">Inferencia causal más sólida</text>
+<text x="350" y="58" text-anchor="middle" font-size="12" fill="#57606C">¿X produce Y? (no garantizada solo por esto)</text>
 
-      div(class = "text-center px-3 py-3 rounded-3 h-100",
-          style = "background:#dceefa; border:1px solid #1170AA;",
-          strong("Aleatorización"), br(),
-          tags$small(class = "text-muted", "Asigna tratamientos sin sesgo")),
+<line x1="110" y1="150" x2="300" y2="72" stroke="#8A8F98" stroke-width="1.5" marker-end="url(#arrowFund)"></line>
+<line x1="350" y1="150" x2="350" y2="72" stroke="#8A8F98" stroke-width="1.5" marker-end="url(#arrowFund)"></line>
+<line x1="590" y1="150" x2="400" y2="72" stroke="#8A8F98" stroke-width="1.5" marker-end="url(#arrowFund)"></line>
 
-      div(class = "text-center px-3 py-3 rounded-3 h-100",
-          style = "background:#dceefa; border:1px solid #1170AA;",
-          strong("Replicación"), br(),
-          tags$small(class = "text-muted", "Unidades independientes, no submuestras")),
+<rect x="20" y="150" width="180" height="80" rx="10" fill="#dceefa" stroke="#1170AA"></rect>
+<text x="110" y="182" text-anchor="middle" font-size="14" font-weight="600" fill="#0c3a5c">Aleatorización</text>
+<text x="110" y="202" text-anchor="middle" font-size="12" fill="#0c3a5c">Asigna tratamientos</text>
+<text x="110" y="217" text-anchor="middle" font-size="12" fill="#0c3a5c">sin sesgo</text>
 
-      div(class = "text-center px-3 py-3 rounded-3 h-100",
-          style = "background:#dceefa; border:1px solid #1170AA;",
-          strong("Control"), br(),
-          tags$small(class = "text-muted", "Línea base para aislar el efecto"))
-    ),
+<rect x="260" y="150" width="180" height="80" rx="10" fill="#dceefa" stroke="#1170AA"></rect>
+<text x="350" y="182" text-anchor="middle" font-size="14" font-weight="600" fill="#0c3a5c">Replicación</text>
+<text x="350" y="202" text-anchor="middle" font-size="12" fill="#0c3a5c">Unidades independientes,</text>
+<text x="350" y="217" text-anchor="middle" font-size="12" fill="#0c3a5c">no submuestras</text>
 
-    div(
-      class = "d-flex justify-content-center mt-3",
-      div(
-        class = "text-center small px-3 py-2 rounded-3",
-        style = paste0("background:#fde7e0; border:1px solid ", colores$peligro, "; max-width:460px;"),
-        span(style = paste0("color:", colores$peligro, "; font-weight:600;"), "⚠ Pseudoreplicación"),
-        " ocurre cuando el pilar de Replicación falla — ver la pestaña correspondiente para evitarla."
-      )
-    )
+<rect x="500" y="150" width="180" height="80" rx="10" fill="#dceefa" stroke="#1170AA"></rect>
+<text x="590" y="182" text-anchor="middle" font-size="14" font-weight="600" fill="#0c3a5c">Control</text>
+<text x="590" y="202" text-anchor="middle" font-size="12" fill="#0c3a5c">Línea base para</text>
+<text x="590" y="217" text-anchor="middle" font-size="12" fill="#0c3a5c">aislar el efecto</text>
+
+<line x1="350" y1="230" x2="350" y2="260" stroke="#C85200" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowFund)"></line>
+
+<rect x="230" y="260" width="240" height="64" rx="10" fill="#fde7e0" stroke="#C85200"></rect>
+<text x="350" y="284" text-anchor="middle" font-size="14" font-weight="600" fill="#8a3200">⚠ Pseudoreplicación</text>
+<text x="350" y="302" text-anchor="middle" font-size="12" fill="#8a3200">Tratar submuestras como si</text>
+<text x="350" y="316" text-anchor="middle" font-size="12" fill="#8a3200">fueran réplicas independientes</text>
+
+<text x="350" y="350" text-anchor="middle" font-size="11" font-style="italic" fill="#8A8F98">Necesarios, pero no suficientes: deserción, error de medición y poder estadístico también importan.</text>
+</svg>
+')
   )
 }
 
