@@ -100,11 +100,66 @@ tab_contenido <- function(t) {
   )
 }
 
+# Esquema: árbol de decisión para elegir el tipo de estudio.
+# Vive arriba de los sub-tabs, visible sin importar cuál esté seleccionado.
+esquema_decision_tipos <- function() {
+  div(
+    class = "mb-4 p-3 rounded-3",
+    style = paste0("background:", colores$fondo, "; border: 1px solid ", colores$borde, ";"),
+
+    p(class = "small fw-semibold text-uppercase mb-3",
+      style = paste0("color:", colores$texto, "; letter-spacing:.03em;"),
+      bsicons::bs_icon("diagram-2", class = "me-1"),
+      "¿Qué tipo de estudio necesito?"),
+
+    div(
+      class = "text-center mb-1",
+      div(class = "d-inline-block px-3 py-2 rounded-3 bg-white border",
+          strong("1. ¿Manipulás una variable de forma deliberada?"))
+    ),
+    div(class = "text-center small text-muted mb-3",
+        "No, seguí al paso 2 ↓        Sí, mirá la columna derecha ↘"),
+
+    bslib::layout_columns(
+      col_widths = c(7, 5),
+      fill       = FALSE,
+
+      div(
+        div(
+          class = "text-center mb-1",
+          div(class = "d-inline-block px-3 py-2 rounded-3 bg-white border",
+              strong("2. ¿Buscás relación o asociación entre variables?"))
+        ),
+        div(class = "text-center small text-muted mb-2", "No ↓        Sí ↓"),
+        bslib::layout_columns(
+          col_widths = c(6, 6),
+          div(class = "text-center px-3 py-3 rounded-3",
+              style = "background:#dceefa; border:1px solid #5FA2CE;",
+              strong("Descriptivo")),
+          div(class = "text-center px-3 py-3 rounded-3",
+              style = "background:#ffe6ce; border:1px solid #FC7D0B;",
+              strong("Observacional / Correlacional"))
+        )
+      ),
+
+      div(
+        class = "d-flex align-items-center justify-content-center h-100",
+        div(class = "text-center px-3 py-3 rounded-3 w-100",
+            style = "background:#d6e6f7; border:1px solid #1170AA;",
+            strong("Experimental"))
+      )
+    )
+  )
+}
+
 # ── UI ────────────────────────────────────────────────────
 mod_tipos_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
+
+    esquema_decision_tipos(),
+
     bslib::navset_card_tab(
       id = ns("tabs_tipos"),
 

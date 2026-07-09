@@ -9,11 +9,66 @@
 #   StatModels  — Modelos avanzados (próximamente)
 # ============================================================
 
+# ── Esquema: los tres pilares de un experimento riguroso ──
+# Vive arriba de los sub-tabs, visible sin importar cuál esté seleccionado.
+esquema_pilares_fundamentos <- function() {
+  div(
+    class = "mb-4 p-3 rounded-3",
+    style = paste0("background:", colores$fondo, "; border: 1px solid ", colores$borde, ";"),
+
+    p(class = "small fw-semibold text-uppercase mb-3",
+      style = paste0("color:", colores$texto, "; letter-spacing:.03em;"),
+      bsicons::bs_icon("diagram-3", class = "me-1"),
+      "Los tres pilares de un experimento riguroso"),
+
+    div(
+      class = "text-center mb-2",
+      div(class = "d-inline-block px-3 py-2 rounded-3",
+          style = paste0("background:", colores$primario, "; color:#fff;"),
+          strong("Inferencia causal válida"), br(),
+          tags$small("¿X produce Y?"))
+    ),
+    div(class = "text-center small text-muted mb-3", "↑ sostenida por los tres pilares ↑"),
+
+    bslib::layout_columns(
+      col_widths = c(4, 4, 4),
+      fill       = FALSE,
+
+      div(class = "text-center px-3 py-3 rounded-3 h-100",
+          style = "background:#dceefa; border:1px solid #1170AA;",
+          strong("Aleatorización"), br(),
+          tags$small(class = "text-muted", "Asigna tratamientos sin sesgo")),
+
+      div(class = "text-center px-3 py-3 rounded-3 h-100",
+          style = "background:#dceefa; border:1px solid #1170AA;",
+          strong("Replicación"), br(),
+          tags$small(class = "text-muted", "Unidades independientes, no submuestras")),
+
+      div(class = "text-center px-3 py-3 rounded-3 h-100",
+          style = "background:#dceefa; border:1px solid #1170AA;",
+          strong("Control"), br(),
+          tags$small(class = "text-muted", "Línea base para aislar el efecto"))
+    ),
+
+    div(
+      class = "d-flex justify-content-center mt-3",
+      div(
+        class = "text-center small px-3 py-2 rounded-3",
+        style = paste0("background:#fde7e0; border:1px solid ", colores$peligro, "; max-width:460px;"),
+        span(style = paste0("color:", colores$peligro, "; font-weight:600;"), "⚠ Pseudoreplicación"),
+        " ocurre cuando el pilar de Replicación falla — ver la pestaña correspondiente para evitarla."
+      )
+    )
+  )
+}
+
 # ── UI ────────────────────────────────────────────────────
 mod_fundamentos_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
+
+    esquema_pilares_fundamentos(),
 
     bslib::navset_card_tab(
 
