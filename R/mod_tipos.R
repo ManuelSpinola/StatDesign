@@ -105,11 +105,11 @@ tab_contenido <- function(t) {
 # para no depender de ninguna variable CSS externa a la app).
 esquema_decision_tipos <- function() {
   div(
-    class = "mb-2 p-3 rounded-3",
+    class = "mb-2 p-5 rounded-3",
     style = paste0("background:", colores$fondo, "; border: 1px solid ", colores$borde, ";"),
 
     HTML('
-<svg viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:700px; display:block; margin:0 auto;">
+<svg viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:1000px; display:block; margin:0 auto;">
 <title>Árbol de decisión para elegir tipo de estudio</title>
 <desc>Diagrama que ayuda a elegir entre estudio descriptivo, observacional o experimental según si se manipula una variable y si se busca relación entre variables.</desc>
 <defs>
