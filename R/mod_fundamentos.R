@@ -83,6 +83,7 @@ mod_fundamentos_ui <- function(id) {
       # ── Tab 1: Aleatorización ──────────────────────────
       bslib::nav_panel(
         title = tagList(bsicons::bs_icon("shuffle"), " Aleatorización"),
+        fillable = FALSE,
         bslib::card_body(
           bslib::layout_columns(
             col_widths = c(12),
@@ -153,6 +154,7 @@ mod_fundamentos_ui <- function(id) {
       # ── Tab 2: Replicación ─────────────────────────────
       bslib::nav_panel(
         title = tagList(bsicons::bs_icon("copy"), " Replicación"),
+        fillable = FALSE,
         bslib::card_body(
           bslib::layout_columns(
             col_widths = c(12),
@@ -227,6 +229,7 @@ mod_fundamentos_ui <- function(id) {
       # ── Tab 3: Control ─────────────────────────────────
       bslib::nav_panel(
         title = tagList(bsicons::bs_icon("sliders"), " Control"),
+        fillable = FALSE,
         bslib::card_body(
           bslib::layout_columns(
             col_widths = c(12),
@@ -295,6 +298,7 @@ mod_fundamentos_ui <- function(id) {
       # ── Tab 4: Pseudoreplicación ───────────────────────
       bslib::nav_panel(
         title = tagList(bsicons::bs_icon("exclamation-triangle"), " Pseudoreplicación"),
+        fillable = FALSE,
         bslib::card_body(
           bslib::layout_columns(
             col_widths = c(12),
