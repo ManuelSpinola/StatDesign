@@ -105,13 +105,8 @@ tab_contenido <- function(t) {
 # para no depender de ninguna variable CSS externa a la app).
 esquema_decision_tipos <- function() {
   div(
-    class = "mb-4 p-3 rounded-3",
+    class = "mb-2 p-3 rounded-3",
     style = paste0("background:", colores$fondo, "; border: 1px solid ", colores$borde, ";"),
-
-    p(class = "small fw-semibold text-uppercase mb-3",
-      style = paste0("color:", colores$texto, "; letter-spacing:.03em;"),
-      bsicons::bs_icon("diagram-2", class = "me-1"),
-      "¿Qué tipo de estudio necesito?"),
 
     HTML('
 <svg viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:700px; display:block; margin:0 auto;">
@@ -177,10 +172,15 @@ mod_tipos_ui <- function(id) {
 
   tagList(
 
-    esquema_decision_tipos(),
-
     bslib::navset_card_tab(
       id = ns("tabs_tipos"),
+
+      bslib::nav_panel(
+        title    = tagList(bsicons::bs_icon("signpost-2"), " ¿Qué tipo de estudio necesito?"),
+        value    = "decision",
+        fillable = FALSE,
+        esquema_decision_tipos()
+      ),
 
       bslib::nav_panel(
         title    = tagList(bsicons::bs_icon("clipboard-data"), " Descriptivo"),
