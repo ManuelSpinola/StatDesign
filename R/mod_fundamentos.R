@@ -97,6 +97,33 @@ mod_fundamentos_ui <- function(id) {
                 p("Es el elemento que ", strong("distingue un experimento de un
                   estudio observacional"), ": en el experimento, el investigador
                   controla y aleatoriza la asignación de tratamientos."),
+
+                div(
+                  class = "mb-3 p-3 rounded-3",
+                  style = "background:#F4F7FB; border: 1px solid #C8D9EC;",
+                  HTML('
+<svg viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:640px; display:block; margin:0 auto;">
+<title>Asignación aleatoria de tratamientos en el espacio</title>
+<desc>Ocho parcelas dispersas irregularmente en el espacio, coloreadas como control o tratamiento de forma intercalada, sin agrupar por bloques.</desc>
+
+<rect x="40"  y="26"  width="46" height="46" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<rect x="160" y="64"  width="46" height="46" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<rect x="284" y="18"  width="46" height="46" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<rect x="94"  y="132" width="46" height="46" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<rect x="380" y="104" width="46" height="46" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<rect x="486" y="40"  width="46" height="46" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<rect x="524" y="140" width="46" height="46" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<rect x="222" y="148" width="46" height="46" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+
+<rect x="20" y="182" width="16" height="16" rx="3" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<text x="42" y="195" font-size="13" fill="#57606C">Control</text>
+<rect x="130" y="182" width="16" height="16" rx="3" fill="#d6e6f7" stroke="#1170AA"></rect>
+<text x="152" y="195" font-size="13" fill="#57606C">Tratamiento</text>
+<text x="640" y="195" text-anchor="end" font-size="12" font-style="italic" fill="#8A8F98">Parcelas intercaladas, sin agrupar por bloques</text>
+</svg>
+')
+                ),
+
                 div(
                   class = "wiz-result mb-3",
                   p(class = "small mb-0",
@@ -169,6 +196,55 @@ mod_fundamentos_ui <- function(id) {
                   el mismo tratamiento o condición. Las submuestras tomadas
                   dentro de una misma unidad ", strong("no"), " son réplicas
                   independientes."),
+
+                div(
+                  class = "mb-3 p-3 rounded-3",
+                  style = "background:#F4F7FB; border: 1px solid #C8D9EC;",
+                  HTML('
+<svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:640px; display:block; margin:0 auto;">
+<title>Réplicas verdaderas vs. submuestras</title>
+<desc>Dos grupos de parcelas, control y tratamiento, cada uno con dos réplicas verdaderas. Dentro de una réplica se señalan puntos de muestreo como submuestras, no independientes entre sí.</desc>
+
+<text x="140" y="20" text-anchor="middle" font-size="13" font-weight="600" fill="#8a4611">Control (sin tala)</text>
+<text x="500" y="20" text-anchor="middle" font-size="13" font-weight="600" fill="#0c3a5c">Tratamiento (con tala)</text>
+
+<rect x="60"  y="34" width="60" height="60" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="78"  cy="52" r="4" fill="#b35800"></circle>
+<circle cx="98"  cy="52" r="4" fill="#b35800"></circle>
+<circle cx="78"  cy="74" r="4" fill="#b35800"></circle>
+<circle cx="98"  cy="74" r="4" fill="#b35800"></circle>
+
+<rect x="160" y="34" width="60" height="60" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="178" cy="52" r="4" fill="#b35800"></circle>
+<circle cx="198" cy="52" r="4" fill="#b35800"></circle>
+<circle cx="178" cy="74" r="4" fill="#b35800"></circle>
+<circle cx="198" cy="74" r="4" fill="#b35800"></circle>
+
+<rect x="420" y="34" width="60" height="60" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="438" cy="52" r="4" fill="#0c3a5c"></circle>
+<circle cx="458" cy="52" r="4" fill="#0c3a5c"></circle>
+<circle cx="438" cy="74" r="4" fill="#0c3a5c"></circle>
+<circle cx="458" cy="74" r="4" fill="#0c3a5c"></circle>
+
+<rect x="520" y="34" width="60" height="60" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="538" cy="52" r="4" fill="#0c3a5c"></circle>
+<circle cx="558" cy="52" r="4" fill="#0c3a5c"></circle>
+<circle cx="538" cy="74" r="4" fill="#0c3a5c"></circle>
+<circle cx="558" cy="74" r="4" fill="#0c3a5c"></circle>
+
+<line x1="200" y1="120" x2="170" y2="98" stroke="#57606C" stroke-width="1.3"></line>
+<rect x="140" y="122" width="72" height="26" rx="5" fill="#ECEFF3" stroke="#B7C2CE"></rect>
+<text x="176" y="139" text-anchor="middle" font-size="12" font-weight="600" fill="#33383D">Réplica</text>
+
+<line x1="260" y1="172" x2="198" y2="76" stroke="#8a3200" stroke-width="1.3"></line>
+<rect x="222" y="176" width="96" height="26" rx="5" fill="#fde7e0" stroke="#C85200"></rect>
+<text x="270" y="193" text-anchor="middle" font-size="12" font-weight="600" fill="#8a3200">Submuestra</text>
+
+<text x="320" y="218" text-anchor="middle" font-size="11" font-style="italic" fill="#8A8F98">Las submuestras dentro de una réplica no son independientes entre sí</text>
+</svg>
+')
+                ),
+
                 div(
                   class = "wiz-result mb-3",
                   tags$dl(
@@ -246,6 +322,56 @@ mod_fundamentos_ui <- function(id) {
                   de otros factores que podrían influir en la variable respuesta.
                   Sin un grupo control, no es posible atribuir causalmente los
                   cambios observados al tratamiento."),
+
+                div(
+                  class = "mb-3 p-3 rounded-3",
+                  style = "background:#F4F7FB; border: 1px solid #C8D9EC;",
+                  HTML('
+<svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:640px; display:block; margin:0 auto;">
+<title>Grupo control vs. grupo tratamiento</title>
+<desc>Cuatro parcelas control sin exclusión de venados, comparadas con cuatro parcelas de tratamiento con exclusión de venados, para aislar el efecto del tratamiento.</desc>
+
+<text x="150" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="#8a4611">Control &#8212; no exclusión de venados</text>
+<text x="490" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="#0c3a5c">Tratamiento &#8212; exclusión de venados</text>
+
+<rect x="60"  y="36" width="60" height="60" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="78" cy="54" r="4" fill="#b35800"></circle><circle cx="98" cy="54" r="4" fill="#b35800"></circle>
+<circle cx="78" cy="76" r="4" fill="#b35800"></circle><circle cx="98" cy="76" r="4" fill="#b35800"></circle>
+
+<rect x="160" y="36" width="60" height="60" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="178" cy="54" r="4" fill="#b35800"></circle><circle cx="198" cy="54" r="4" fill="#b35800"></circle>
+<circle cx="178" cy="76" r="4" fill="#b35800"></circle><circle cx="198" cy="76" r="4" fill="#b35800"></circle>
+
+<rect x="60"  y="116" width="60" height="60" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="78" cy="134" r="4" fill="#b35800"></circle><circle cx="98" cy="134" r="4" fill="#b35800"></circle>
+<circle cx="78" cy="156" r="4" fill="#b35800"></circle><circle cx="98" cy="156" r="4" fill="#b35800"></circle>
+
+<rect x="160" y="116" width="60" height="60" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="178" cy="134" r="4" fill="#b35800"></circle><circle cx="198" cy="134" r="4" fill="#b35800"></circle>
+<circle cx="178" cy="156" r="4" fill="#b35800"></circle><circle cx="198" cy="156" r="4" fill="#b35800"></circle>
+
+<rect x="410" y="36" width="60" height="60" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="428" cy="54" r="4" fill="#0c3a5c"></circle><circle cx="448" cy="54" r="4" fill="#0c3a5c"></circle>
+<circle cx="428" cy="76" r="4" fill="#0c3a5c"></circle><circle cx="448" cy="76" r="4" fill="#0c3a5c"></circle>
+
+<rect x="510" y="36" width="60" height="60" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="528" cy="54" r="4" fill="#0c3a5c"></circle><circle cx="548" cy="54" r="4" fill="#0c3a5c"></circle>
+<circle cx="528" cy="76" r="4" fill="#0c3a5c"></circle><circle cx="548" cy="76" r="4" fill="#0c3a5c"></circle>
+
+<rect x="410" y="116" width="60" height="60" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="428" cy="134" r="4" fill="#0c3a5c"></circle><circle cx="448" cy="134" r="4" fill="#0c3a5c"></circle>
+<circle cx="428" cy="156" r="4" fill="#0c3a5c"></circle><circle cx="448" cy="156" r="4" fill="#0c3a5c"></circle>
+
+<rect x="510" y="116" width="60" height="60" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="528" cy="134" r="4" fill="#0c3a5c"></circle><circle cx="548" cy="134" r="4" fill="#0c3a5c"></circle>
+<circle cx="528" cy="156" r="4" fill="#0c3a5c"></circle><circle cx="548" cy="156" r="4" fill="#0c3a5c"></circle>
+
+<line x1="240" y1="100" x2="390" y2="100" stroke="#8A8F98" stroke-width="1.3" stroke-dasharray="3 3"></line>
+<text x="315" y="115" text-anchor="middle" font-size="11" font-style="italic" fill="#8A8F98">Manejadas igual, salvo el tratamiento</text>
+</svg>
+')
+                ),
+
                 div(
                   class = "wiz-result mb-3",
                   p(class = "small mb-2",
