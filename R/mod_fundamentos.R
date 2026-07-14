@@ -77,7 +77,29 @@ mod_fundamentos_ui <- function(id) {
         title    = tagList(bsicons::bs_icon("diagram-3"), " Los tres pilares"),
         value    = "pilares",
         fillable = FALSE,
-        esquema_pilares_fundamentos()
+        esquema_pilares_fundamentos(),
+        div(
+          class = "px-2 pb-2",
+          p(class = "small text-muted mb-2",
+            "Aleatorización, replicación y control son ", strong("necesarios"),
+            " para una inferencia causal sólida, pero ", strong("no la garantizan"),
+            " por sí solos. Un experimento bien diseñado en estos tres pilares
+             puede seguir fallando por otros motivos, ajenos al diseño experimental:"
+          ),
+          tags$ul(
+            class = "small text-muted mb-0",
+            tags$li(strong("Deserción: "), "si las unidades abandonan el estudio
+                     de forma no aleatoria (por ejemplo, sobreviven más las más
+                     sanas en un grupo que en otro), los grupos dejan de ser
+                     comparables aunque la asignación inicial fue aleatoria."),
+            tags$li(strong("Error de medición: "), "un instrumento o protocolo
+                     impreciso agrega ruido a los datos, lo que puede ocultar
+                     un efecto real o generar diferencias que no existen."),
+            tags$li(strong("Poder estadístico: "), "con una muestra muy pequeña,
+                     una prueba estadística puede no detectar un efecto real
+                     (falso negativo), aunque el diseño sea impecable.")
+          )
+        )
       ),
 
       # ── Tab 1: Aleatorización ──────────────────────────
