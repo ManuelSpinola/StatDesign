@@ -461,6 +461,102 @@ mod_fundamentos_ui <- function(id) {
                     span(class = "text-muted", "— Hurlbert, S.H. (1984). Ecological Monographs, 54, 187–211.")
                   )
                 ),
+
+                div(
+                  class = "mb-3 p-3 rounded-3",
+                  style = "background:#F4F7FB; border: 1px solid #C8D9EC;",
+                  HTML('
+<svg viewBox="0 0 640 430" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:640px; display:block; margin:0 auto;">
+<title>Tres subtipos de pseudoreplicación</title>
+<desc>Diagrama de tres subtipos de pseudoreplicación: simple, de sacrificio y temporal, representados con cajas y puntos de muestreo etiquetados x e y.</desc>
+<defs>
+<marker id="arrowPseudo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0,0 L10,5 L0,10 z" fill="#57606C"></path>
+</marker>
+</defs>
+
+<text x="10" y="18" font-size="13" font-weight="600" fill="#33383D">A. Pseudoreplicación simple</text>
+<rect x="60"  y="30" width="90" height="70" rx="6" fill="#ECEFF3" stroke="#B7C2CE"></rect>
+<circle cx="85"  cy="52" r="4" fill="#FC7D0B"></circle>
+<circle cx="115" cy="46" r="4" fill="#FC7D0B"></circle>
+<circle cx="80"  cy="80" r="4" fill="#FC7D0B"></circle>
+<circle cx="120" cy="80" r="4" fill="#FC7D0B"></circle>
+<text x="30" y="46" font-size="12" fill="#8a4611">x1 x2</text>
+<text x="30" y="88" font-size="12" fill="#8a4611">x3 x4</text>
+
+<rect x="240" y="30" width="90" height="70" rx="6" fill="#ECEFF3" stroke="#B7C2CE"></rect>
+<circle cx="265" cy="52" r="4" fill="#1170AA"></circle>
+<circle cx="295" cy="46" r="4" fill="#1170AA"></circle>
+<circle cx="260" cy="80" r="4" fill="#1170AA"></circle>
+<circle cx="300" cy="80" r="4" fill="#1170AA"></circle>
+<text x="340" y="46" font-size="12" fill="#0c3a5c">y1 y2</text>
+<text x="340" y="88" font-size="12" fill="#0c3a5c">y3 y4</text>
+<text x="420" y="65" font-size="12" font-style="italic" fill="#8A8F98">n = 1 por grupo</text>
+
+<line x1="0" y1="125" x2="640" y2="125" stroke="#E4E9F0" stroke-width="1"></line>
+
+<text x="10" y="150" font-size="13" font-weight="600" fill="#33383D">B. Pseudoreplicación de sacrificio</text>
+<rect x="60"  y="165" width="60" height="55" rx="6" fill="#ECEFF3" stroke="#B7C2CE"></rect>
+<circle cx="80" cy="185" r="4" fill="#1170AA"></circle><circle cx="100" cy="195" r="4" fill="#1170AA"></circle>
+<text x="60" y="235" font-size="11" fill="#0c3a5c">y1 y2</text>
+
+<rect x="160" y="165" width="60" height="55" rx="6" fill="#ECEFF3" stroke="#B7C2CE"></rect>
+<circle cx="180" cy="185" r="4" fill="#FC7D0B"></circle><circle cx="200" cy="195" r="4" fill="#FC7D0B"></circle>
+<text x="160" y="235" font-size="11" fill="#8a4611">x1 x2</text>
+
+<rect x="290" y="165" width="60" height="55" rx="6" fill="#ECEFF3" stroke="#B7C2CE"></rect>
+<circle cx="310" cy="185" r="4" fill="#1170AA"></circle><circle cx="330" cy="195" r="4" fill="#1170AA"></circle>
+<text x="290" y="235" font-size="11" fill="#0c3a5c">y3 y4</text>
+
+<rect x="390" y="165" width="60" height="55" rx="6" fill="#ECEFF3" stroke="#B7C2CE"></rect>
+<circle cx="410" cy="185" r="4" fill="#FC7D0B"></circle><circle cx="430" cy="195" r="4" fill="#FC7D0B"></circle>
+<text x="390" y="235" font-size="11" fill="#8a4611">x3 x4</text>
+<text x="470" y="200" font-size="12" font-style="italic" fill="#8A8F98">n = 2 por grupo, no 4</text>
+
+<line x1="0" y1="260" x2="640" y2="260" stroke="#E4E9F0" stroke-width="1"></line>
+
+<text x="10" y="285" font-size="13" font-weight="600" fill="#33383D">C. Pseudoreplicación temporal</text>
+<rect x="60"  y="300" width="60" height="50" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="90" cy="325" r="4" fill="#8a4611"></circle>
+<text x="70" y="296" font-size="11" fill="#8a4611">x1</text>
+
+<rect x="180" y="300" width="60" height="50" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="210" cy="325" r="4" fill="#8a4611"></circle>
+<text x="190" y="296" font-size="11" fill="#8a4611">x2</text>
+
+<rect x="300" y="300" width="60" height="50" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="330" cy="325" r="4" fill="#8a4611"></circle>
+<text x="310" y="296" font-size="11" fill="#8a4611">x3</text>
+
+<rect x="420" y="300" width="60" height="50" rx="6" fill="#ffe6ce" stroke="#FC7D0B"></rect>
+<circle cx="450" cy="325" r="4" fill="#8a4611"></circle>
+<text x="430" y="296" font-size="11" fill="#8a4611">x4</text>
+
+<line x1="55" y1="365" x2="485" y2="365" stroke="#57606C" stroke-width="1.5" marker-end="url(#arrowPseudo)"></line>
+<text x="270" y="360" text-anchor="middle" font-size="12" fill="#57606C">Tiempo</text>
+
+<rect x="60"  y="380" width="60" height="50" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="90" cy="405" r="4" fill="#0c3a5c"></circle>
+<text x="70" y="440" font-size="11" fill="#0c3a5c">y1</text>
+
+<rect x="180" y="380" width="60" height="50" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="210" cy="405" r="4" fill="#0c3a5c"></circle>
+<text x="190" y="440" font-size="11" fill="#0c3a5c">y2</text>
+
+<rect x="300" y="380" width="60" height="50" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="330" cy="405" r="4" fill="#0c3a5c"></circle>
+<text x="310" y="440" font-size="11" fill="#0c3a5c">y3</text>
+
+<rect x="420" y="380" width="60" height="50" rx="6" fill="#d6e6f7" stroke="#1170AA"></rect>
+<circle cx="450" cy="405" r="4" fill="#0c3a5c"></circle>
+<text x="430" y="440" font-size="11" fill="#0c3a5c">y4</text>
+
+<text x="540" y="330" font-size="12" font-style="italic" fill="#8A8F98">Medidas repetidas</text>
+<text x="540" y="346" font-size="12" font-style="italic" fill="#8A8F98">de la misma unidad</text>
+</svg>
+')
+                ),
+
                 p("La pseudoreplicación ocurre cuando se tratan submuestras —
                   observaciones no independientes tomadas dentro de la misma unidad
                   experimental — como si fueran réplicas verdaderas. Esto infla
