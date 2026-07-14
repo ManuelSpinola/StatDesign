@@ -87,8 +87,10 @@ mod_fundamentos_ui <- function(id) {
         bslib::card_body(
           bslib::layout_columns(
             col_widths = c(12),
+            fill       = FALSE,
 
             bslib::card(
+              fill = FALSE,
               bslib::card_header(bsicons::bs_icon("shuffle"), " ¿Qué es la aleatorización?"),
               bslib::card_body(
                 p("La aleatorización es el proceso de asignar las unidades
@@ -137,8 +139,10 @@ mod_fundamentos_ui <- function(id) {
 
             bslib::layout_columns(
               col_widths = c(6, 6),
+              fill       = FALSE,
 
               bslib::card(
+                fill = FALSE,
                 bslib::card_header(bsicons::bs_icon("diagram-3"), " Dos tipos de aleatorización"),
                 bslib::card_body(
                   tags$dl(
@@ -158,6 +162,7 @@ mod_fundamentos_ui <- function(id) {
               ),
 
               bslib::card(
+                fill = FALSE,
                 bslib::card_header(bsicons::bs_icon("journal-text"), " Ejemplo"),
                 bslib::card_body(
                   div(
@@ -185,8 +190,10 @@ mod_fundamentos_ui <- function(id) {
         bslib::card_body(
           bslib::layout_columns(
             col_widths = c(12),
+            fill       = FALSE,
 
             bslib::card(
+              fill = FALSE,
               bslib::card_header(bsicons::bs_icon("layers"), " ¿Qué es la replicación?"),
               bslib::card_body(
                 p("La replicación es la asignación del mismo tratamiento —
@@ -266,8 +273,10 @@ mod_fundamentos_ui <- function(id) {
 
             bslib::layout_columns(
               col_widths = c(6, 6),
+              fill       = FALSE,
 
               bslib::card(
+                fill = FALSE,
                 bslib::card_header(bsicons::bs_icon("check-circle"), " ¿Para qué sirve?"),
                 bslib::card_body(
                   tags$ul(
@@ -282,6 +291,7 @@ mod_fundamentos_ui <- function(id) {
               ),
 
               bslib::card(
+                fill = FALSE,
                 bslib::card_header(bsicons::bs_icon("journal-text"), " Ejemplo"),
                 bslib::card_body(
                   div(
@@ -309,8 +319,10 @@ mod_fundamentos_ui <- function(id) {
         bslib::card_body(
           bslib::layout_columns(
             col_widths = c(12),
+            fill       = FALSE,
 
             bslib::card(
+              fill = FALSE,
               bslib::card_header(bsicons::bs_icon("sliders"), " ¿Qué es el control experimental?"),
               bslib::card_body(
                 p("En experimentación, los ", strong("controles"), " son
@@ -385,8 +397,10 @@ mod_fundamentos_ui <- function(id) {
 
             bslib::layout_columns(
               col_widths = c(6, 6),
+              fill       = FALSE,
 
               bslib::card(
+                fill = FALSE,
                 bslib::card_header(bsicons::bs_icon("check-circle"), " ¿Para qué sirve?"),
                 bslib::card_body(
                   tags$ul(
@@ -400,6 +414,7 @@ mod_fundamentos_ui <- function(id) {
               ),
 
               bslib::card(
+                fill = FALSE,
                 bslib::card_header(bsicons::bs_icon("journal-text"), " Ejemplo"),
                 bslib::card_body(
                   div(
@@ -428,8 +443,10 @@ mod_fundamentos_ui <- function(id) {
         bslib::card_body(
           bslib::layout_columns(
             col_widths = c(12),
+            fill       = FALSE,
 
             bslib::card(
+              fill = FALSE,
               bslib::card_header(bsicons::bs_icon("exclamation-triangle"), " ¿Qué es la pseudoreplicación?"),
               bslib::card_body(
                 div(
@@ -455,8 +472,10 @@ mod_fundamentos_ui <- function(id) {
             # Tres tipos
             bslib::layout_columns(
               col_widths = c(4, 4, 4),
+              fill       = FALSE,
 
               bslib::card(
+                fill = FALSE,
                 bslib::card_header(
                   class = "bg-light",
                   bsicons::bs_icon("geo-alt"), " Simple"
@@ -483,6 +502,7 @@ mod_fundamentos_ui <- function(id) {
               ),
 
               bslib::card(
+                fill = FALSE,
                 bslib::card_header(
                   class = "bg-light",
                   bsicons::bs_icon("archive"), " De sacrificio"
@@ -510,6 +530,7 @@ mod_fundamentos_ui <- function(id) {
               ),
 
               bslib::card(
+                fill = FALSE,
                 bslib::card_header(
                   class = "bg-light",
                   bsicons::bs_icon("clock-history"), " Temporal"
@@ -535,10 +556,12 @@ mod_fundamentos_ui <- function(id) {
             ),
 
             bslib::card(
+              fill = FALSE,
               bslib::card_header(bsicons::bs_icon("lightbulb"), " ¿Cómo evitarla?"),
               bslib::card_body(
                 bslib::layout_columns(
                   col_widths = c(6, 6),
+                  fill       = FALSE,
                   div(
                     tags$ol(
                       class = "small mb-0",
