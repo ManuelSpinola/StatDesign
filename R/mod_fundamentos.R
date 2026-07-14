@@ -15,16 +15,11 @@
 # necesarios pero no suficientes, y el diagrama lo aclara explícitamente.
 esquema_pilares_fundamentos <- function() {
   div(
-    class = "mb-4 p-3 rounded-3",
+    class = "mb-2 p-5 rounded-3",
     style = paste0("background:", colores$fondo, "; border: 1px solid ", colores$borde, ";"),
 
-    p(class = "small fw-semibold text-uppercase mb-3",
-      style = paste0("color:", colores$texto, "; letter-spacing:.03em;"),
-      bsicons::bs_icon("diagram-3", class = "me-1"),
-      "Los tres pilares de un experimento riguroso"),
-
     HTML('
-<svg viewBox="0 0 700 375" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:700px; display:block; margin:0 auto;">
+<svg viewBox="0 0 700 375" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%; height:auto; max-width:1000px; display:block; margin:0 auto;">
 <title>Los tres pilares de un experimento riguroso</title>
 <desc>Diagrama que muestra aleatorización, replicación y control como los tres pilares que apoyan una inferencia causal más sólida, con la pseudoreplicación señalada como el error más común asociado a la replicación.</desc>
 <defs>
@@ -75,9 +70,15 @@ mod_fundamentos_ui <- function(id) {
 
   tagList(
 
-    esquema_pilares_fundamentos(),
-
     bslib::navset_card_tab(
+
+      # ── Tab 0: Los tres pilares (esquema general) ───────
+      bslib::nav_panel(
+        title    = tagList(bsicons::bs_icon("diagram-3"), " Los tres pilares"),
+        value    = "pilares",
+        fillable = FALSE,
+        esquema_pilares_fundamentos()
+      ),
 
       # ── Tab 1: Aleatorización ──────────────────────────
       bslib::nav_panel(
